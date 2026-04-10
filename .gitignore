@@ -1,0 +1,26 @@
+# Layer 5 (Observability): Logs are local, never commit
+.claude/logs/*.jsonl
+.claude/logs/*.log
+
+# Credentials (Layer 3)
+.credentials.json
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# IDE & OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+venv/
+.venv/
