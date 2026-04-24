@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-04-23 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-04-24 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -100,13 +100,35 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 
 ---
 
-## 7. DANH SÁCH PROJECTS
+## 7. DANH SÁCH PROJECTS & OPPORTUNITIES (14 items)
 
-| Project | Thư mục | Ghi chú |
-|---------|---------|---------|
-| Chatbot Agent TPLUS Laos | D:\FoxAI\SRC Chatbot Agent TPLUS Laos\ | Phase 1 đang triển khai |
+### **Dự án Triển khai tại Việt Nam (8)**
+| # | Project | Client | Folder | Status |
+|---|---------|--------|--------|--------|
+| 1 | AI Agent cho Sở KHCN Hà Nội | Sở Khoa học & Công nghệ Hà Nội | D:\FoxAI\Dự án Sở KHCN HN | 🔄 |
+| 2 | AI Agent cho Sở KHCN Lào Cai | Sở Khoa học & Công nghệ Lào Cai | TBD | 🔄 |
+| 3 | AI Agent cho Văn phòng Chính phủ | Văn phòng Chính phủ VPCP | D:\FoxAI\Dự án VPCP | 🔄 |
+| 4 | AI Agent cho H05 cục CNTT | H05 Cục CNTT - Bộ Công An | TBD | 🔄 |
+| 5 | AI Agent cho Bệnh viện A | Bệnh viện A Thái Nguyên | TBD | 🔄 |
+| 6 | Big Data cho TTDL Agribank | Ngân hàng Agribank | TBD | 🔄 |
+| 7 | AI Agent cho Đảng ủy Việt Hưng | Đảng ủy phường Việt Hưng | TBD | 🔄 |
+| 8 | Big Data cho Bệnh viện Văn Định | Bệnh viện Văn Định | TBD | 🔄 |
 
-> Cập nhật bảng này mỗi khi có project mới
+### **Dự án Triển khai tại Lào (2)**
+| # | Project | Client | Folder | Status |
+|---|---------|--------|--------|--------|
+| 9 | Chatbot Agent TPLUS | TPLUS Laos | D:\FoxAI\SRC Chatbot Agent TPLUS Laos\ | 🚀 |
+| 10 | Chatbot Agent cho LaoVietBank | LaoVietBank | TBD | 🔄 |
+| 11 | KPI CRM cho LaoVietBank | LaoVietBank | TBD | 🔄 |
+
+### **Cơ hội Kinh doanh (3) 💼**
+| # | Project | Client | Folder | Status |
+|---|---------|--------|--------|--------|
+| 12 | Big Data cho Đảng ủy Vân Đồn | Đảng ủy phường Vân Đồn | TBD | 💼 Opportunity |
+| 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
+| 14 | Big Data cho APBank | APBank (Laos) | TBD | 💼 Opportunity |
+
+> Cập nhật: 2026-04-24 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ---
 
