@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-04-24 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-04-26 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -85,6 +85,9 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 ## 6. RESOURCES & INTEGRATIONS
 
 **MCP Servers khả dụng:**
+- **GitHub** — Quản lý PR, issues, commits, branches, CI status trên GitHub
+  - Repo scope: hoanglong8/claude-harness-kit
+  - Dùng khi: tạo PR, review code, xem CI, tạo issue
 - **Hugging Face Hub** — Tìm models, datasets, papers trên huggingface.co
   - User: hoanglong208
   - Dùng khi: tìm model AI, dataset, hoặc paper research
@@ -94,9 +97,12 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 **Recommended Skills:**
 - `/update-config` — Cấu hình settings.json, hooks, permissions
 - `/loop <interval> <cmd>` — Chạy lặp lại (monitoring, polling)
-- `/schedule` — Scheduled remote agents
-- `/simplify` — Review code quality
-- `/security-review` — Kiểm tra bảo mật
+- `/simplify` — Review code quality sau khi thay đổi
+- `/security-review` — Kiểm tra bảo mật branch hiện tại
+- `/init` — Khởi tạo CLAUDE.md mới cho project
+- `/keybindings-help` — Tùy chỉnh keyboard shortcuts (`~/.claude/keybindings.json`)
+- `/fewer-permission-prompts` — Tối ưu allowlist, giảm popup phê duyệt
+- `/claude-api` — Build/debug apps với Claude API & Anthropic SDK (caching, tools, batch)
 
 ---
 
@@ -128,7 +134,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
 | 14 | Big Data cho APBank | APBank (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-04-24 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+> Cập nhật: 2026-04-26 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ---
 
