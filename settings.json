@@ -1,0 +1,75 @@
+{
+  "$schema": "https://anthropic.com/claude-code/settings.schema.json",
+  "project_name": "{{ PROJECT_NAME }}",
+  "team_size": "{{ TEAM_SIZE }}",
+
+  "permissions": {
+    "tools": {
+      "bash": {
+        "allowed": true,
+        "timeout_ms": 120000,
+        "denylist": [
+          "rm\\s+-rf.*(\\.claude|.git|node_modules)",
+          "git\\s+push\\s+(--force|-f)",
+          "DROP\\s+(TABLE|DATABASE|SCHEMA)",
+          "DELETE\\s+FROM.*WHERE\\s+1=1",
+          "TRUNCATE\\s+TABLE"
+        ]
+      },
+      "write": {
+        "allowed": true,
+        "denied_paths": [
+          ".credentials.json",
+          ".env*",
+          "*.key",
+          "*.pem",
+          "secrets/*"
+        ]
+      },
+      "edit": {
+        "allowed": true,
+        "denied_paths": [
+          ".credentials.json",
+          ".env*",
+          "*.key",
+          "*.pem"
+        ]
+      },
+      "mcp": {
+        "{{ MCP_SERVER_NAME }}": {
+          "enabled": true,
+          "tools": "*"
+        }
+      }
+    }
+  },
+
+  "hooks": {
+    "pre-tool-use": [
+      {
+        "name": "guardrails",
+        "path": ".github/workflows/pre-tool-guardrails.sh",
+        "timeout_ms": 100,
+        "tools": ["bash", "write"]
+      }
+    ],
+    "post-tool-use": [
+      {
+        "name": "audit-logging",
+        "path": ".github/workflows/post-tool-audit.sh",
+        "timeout_ms": 200,
+        "tools": ["bash", "write", "edit"]
+      }
+    ]
+  },
+
+  "observability": {
+    "log_directory": ".claude/logs",
+    "cost_tracking_enabled": true,
+    "anomaly_detection": {
+      "enabled": true,
+      "cost_threshold_usd": 10,
+      "session_duration_minutes": 120
+    }
+  }
+}
