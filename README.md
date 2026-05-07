@@ -70,6 +70,11 @@ Claude-Harness-Kit/
 │   │   └── epics/
 │   └── 📁 decisions/              # Architecture Decision Records (ADR)
 │
+├── 📁 scripts/                     # [Phase 2] Automation scripts
+│   ├── scaffold-story.sh          # Auto-create story files
+│   ├── validate-harness.sh        # Check harness consistency (coming soon)
+│   └── README.md
+│
 └── 📁 Downloads/                   # Project data (nếu có)
 ```
 
@@ -206,6 +211,42 @@ Khi agent gặp:
 - Recurring failure → add checklist
 
 → **Update harness trực tiếp** HOẶC add proposal vào `docs/HARNESS_BACKLOG.md`
+
+---
+
+## 🛠️ Automation Scripts
+
+### scaffold-story.sh
+
+Tự động tạo story files từ templates.
+
+**Cách dùng:**
+```bash
+./scripts/scaffold-story.sh STORY-ID "Story Title" [lane]
+```
+
+**Ví dụ:**
+```bash
+# Normal story (2-3 risk flags)
+./scripts/scaffold-story.sh "STORY-001" "User login" normal
+
+# High-risk story (4+ flags or hard gate)
+./scripts/scaffold-story.sh "STORY-002" "Payment integration" high-risk
+
+# Tiny story (0-1 flags, không tạo file)
+./scripts/scaffold-story.sh "STORY-003" "Fix typo" tiny
+```
+
+**Output:**
+- `tiny`: Không tạo file, chỉ hiển thị reminder
+- `normal`: Tạo file `docs/stories/STORY-ID-title.md`
+- `high-risk`: Tạo folder `docs/stories/STORY-ID-title/` với 4 files
+
+Chi tiết: `scripts/README.md`
+
+### validate-harness.sh (Coming Soon)
+
+Kiểm tra tính nhất quán và đầy đủ của harness.
 
 ---
 
