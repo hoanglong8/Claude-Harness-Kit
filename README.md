@@ -36,44 +36,85 @@ Dự án được cấu trúc chặt chẽ theo mô hình Harness Engineering:
 ## 📁 Cấu trúc thư mục
 
 ```text
-.claude/
-├── 📄 CLAUDE.md                # [Layer 1] Cấu hình chính (Tech stack, Code style)
-├── 📄 MEMORY.md                # [Layer 1] Index tra cứu tri thức dự án
-├── 📄 settings.json            # [Layer 3] Cấp quyền & cấu hình MCP
-├── 📁 memory/                  # [Layer 1] Chi tiết về team và project context
-├── 📁 commands/                # [Layer 1+2] Các workflow tự động hóa (setup, deploy)
-├── 📁 .github/workflows/       # [Layer 4] Guardrails (chặn lệnh nguy hiểm)
-├── 📁 observability/           # [Layer 5] Tool theo dõi chi phí
-└── 📁 logs/                    # [Layer 5] Nhật ký hoạt động & Audit trail
+Claude-Harness-Kit/
+├── 📄 AGENTS.md                    # [Harness v0] Agent Operating Guide
+├── 📄 CLAUDE.md                    # [Layer 1] Cấu hình chính (Tech stack, Code style)
+├── 📄 MEMORY.md                    # [Layer 1] Index tra cứu tri thức dự án
+├── 📄 settings.json                # [Layer 3] Cấp quyền & cấu hình MCP
+├── 📄 README.md                    # Tài liệu chính
+│
+├── 📁 .claude/                     # Local config
+│   └── settings.local.json
+│
+├── 📁 docs/                        # [Harness v0] Documentation & Process
+│   ├── 📄 HARNESS.md              # Human-agent collaboration model
+│   ├── 📄 FEATURE_INTAKE.md       # Classification & risk framework
+│   ├── 📄 ARCHITECTURE.md         # Layering, dependencies, boundaries
+│   ├── 📄 TEST_MATRIX.md          # Behavior-to-proof tracking
+│   ├── 📄 GLOSSARY.md             # Ubiquitous language
+│   ├── 📄 HARNESS_BACKLOG.md      # Proposed harness improvements
+│   │
+│   ├── 📁 templates/              # Reusable templates
+│   │   ├── story.md
+│   │   ├── decision.md
+│   │   ├── spec-intake.md
+│   │   ├── validation-report.md
+│   │   └── high-risk-story/
+│   │       ├── overview.md
+│   │       ├── design.md
+│   │       ├── execplan.md
+│   │       └── validation.md
+│   │
+│   ├── 📁 product/                # Current product contracts
+│   ├── 📁 stories/                # Story-sized work packets
+│   │   └── epics/
+│   └── 📁 decisions/              # Architecture Decision Records (ADR)
+│
+└── 📁 Downloads/                   # Project data (nếu có)
 ```
 
 -----
 
 ## 🚀 Hướng dẫn cài đặt
 
-### 1\. Cài đặt Template toàn cục (Chỉ chạy một lần)
-
-Clone repo này và chạy script setup để lưu template vào máy:
+### 1\. Clone Repository
 
 ```bash
 git clone https://github.com/hoanglong8/Claude-Harness-Kit.git
 cd Claude-Harness-Kit
-chmod +x setup-template.sh
-./setup-template.sh
 ```
 
-### 2\. Áp dụng cho Dự án mới
+### 2\. Hiểu Harness v0
 
-Để tích hợp bộ khung này vào dự án của bạn:
+**Harness v0** = collaboration framework, **KHÔNG có application code**.
 
+Mục tiêu hiện tại: **preserve and grow the harness** trước khi viết code.
+
+**Source of Truth:** Read theo thứ tự:
+1. `README.md` → hiểu project status
+2. `AGENTS.md` → hiểu agent workflow
+3. `docs/FEATURE_INTAKE.md` → phân loại work
+4. `docs/ARCHITECTURE.md` → layering rules
+5. Các docs khác theo cần thiết
+
+### 3\. Khởi tạo cho Project Mới
+
+**Option A: Manual Setup**
 ```bash
 cd /path/to/your-project/
-cp -r ~/.claude/.template/ .claude/
+cp -r ~/Claude-Harness-Kit/docs ./docs
+cp ~/Claude-Harness-Kit/AGENTS.md ./
+cp ~/Claude-Harness-Kit/CLAUDE-TEMPLATE.md ./CLAUDE.md
 
-# Cấu hình nhanh các thông tin quan trọng
-vim .claude/CLAUDE.md    # Thay đổi Tech stack, Lead name
-vim .claude/settings.json # Đặt tên Project
-vim .claude/MEMORY.md    # Cập nhật link Obsidian/Docs
+# Tùy chỉnh
+vim CLAUDE.md           # Tech stack, team info
+vim docs/GLOSSARY.md    # Domain terms (nếu có spec)
+```
+
+**Option B: Harness Init Skill** (Recommended)
+```bash
+# Trong Claude Code:
+# Dùng harness-init.skill để auto-generate structure
 ```
 
 ### 3\. Kích hoạt bảo vệ (Hooks)
@@ -86,30 +127,100 @@ chmod +x .claude/.github/workflows/*.sh
 
 -----
 
-## 🛡️ Cơ chế Bảo vệ (Guardrails)
+## 🎯 Harness Workflow
 
-Layer 4 (Hooks) sẽ tự động ngăn chặn AI thực hiện các hành động sau nếu không có sự cho phép đặc biệt:
+### Feature Intake Process
 
-  - ❌ `DROP TABLE` hoặc các lệnh SQL nguy hiểm.
-  - ❌ `git push --force` lên các nhánh chính.
-  - ❌ Xóa thư mục cấu hình `.claude`.
-  - ❌ Vô tình commit file chứa credentials (`.env`, `.credentials.json`).
+Mọi work phải qua **intake gate** (xem `docs/FEATURE_INTAKE.md`):
+
+1. **Classify input type:**
+   - New spec / Spec slice / Change request / New initiative / Maintenance / Harness improvement
+
+2. **Run risk checklist** (10 flags):
+   - Auth, Authorization, Data model, Audit/security, External systems, Public contracts, Cross-platform, Existing behavior, Weak proof, Multi-domain
+
+3. **Choose lane:**
+   - **Tiny:** 0-1 flags → patch directly
+   - **Normal:** 2-3 flags → create story file
+   - **High-risk:** 4+ flags hoặc hard gate → multi-file story packet
+
+4. **Execute + Update:**
+   - Implement change
+   - Update `docs/TEST_MATRIX.md`
+   - Update product docs + decision log nếu cần
+   - Add harness friction vào `docs/HARNESS_BACKLOG.md`
+
+### Hard Gates (Require high-risk flow)
+  - ❌ Auth changes (login, sessions, JWT)
+  - ❌ Authorization (roles, permissions)
+  - ❌ Data loss hoặc migration
+  - ❌ Audit/security changes
+  - ❌ External provider behavior
+  - ❌ Removing/weakening validation
 
 -----
 
-## 📈 Observability & Cost Tracking
+## 📐 Architecture Rules
 
-Hệ thống tự động ghi lại:
+Chi tiết trong `docs/ARCHITECTURE.md`:
 
-  - **Audit Logs:** Mọi tool call mà AI thực hiện tại `logs/audit.jsonl`.
-  - **Cost Tracker:** Theo dõi số tiền đã chi tiêu trong session hiện tại để tránh vượt ngân sách.
+### Default Layering
+```
+domain
+  ← application
+      ← infrastructure
+          ← interface
+              ← app surfaces
+```
+
+### Dependency Rule
+- Inner layers không được depend on outer layers
+- Domain layer: pure, không depend framework/database/UI
+- Parse unknown data tại boundaries trước khi vào inner code
+
+### Observability Contract
+Canonical JSON log format (khi implementation bắt đầu):
+```json
+{
+  "timestamp": "2026-05-08T10:30:00Z",
+  "level": "info",
+  "request_id": "abc123",
+  "user_id": "user_456",
+  "action": "user.login",
+  "duration_ms": 120,
+  "status_code": 200,
+  "message": "Login successful"
+}
+```
 
 -----
 
-## 🛠️ Tùy chỉnh (Customization)
+## 🧩 Harness Growth
 
-  - **CLAUDE.md:** Giữ file này **dưới 60 dòng**. Nếu thông tin quá dài, hãy chuyển sang `MEMORY.md`.
-  - **Conventional Commits:** AI sẽ tự động tuân thủ định dạng commit của dự án khi được cấu hình trong Layer 1.
+**"Harness grows from friction."**
+
+Khi agent gặp:
+- Confusion → improve instruction
+- Repeated manual reasoning → add template
+- Missing validation → add test command
+- Recurring failure → add checklist
+
+→ **Update harness trực tiếp** HOẶC add proposal vào `docs/HARNESS_BACKLOG.md`
+
+---
+
+## 🔗 Tích hợp harness-experimental
+
+Harness này được build dựa trên [harness-experimental](https://github.com/hoangnb24/harness-experimental):
+
+- **CE (harness-experimental)** = theoretical framework (rules, process)
+- **CHK (Claude-Harness-Kit)** = practical implementation (tools, templates)
+
+Files được sync từ CE:
+- `docs/FEATURE_INTAKE.md`
+- `docs/ARCHITECTURE.md`
+- `docs/HARNESS.md`
+- `docs/templates/*`
 
 -----
 
