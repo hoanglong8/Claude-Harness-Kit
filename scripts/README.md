@@ -49,30 +49,52 @@ Automation scripts for Harness Engineering workflow.
 
 **Usage:**
 ```bash
-./scripts/validate-harness.sh [--fix]
+./scripts/validate-harness.sh [OPTIONS]
 ```
 
 **Options:**
 - `--fix` — Auto-fix issues where possible
+- `--strict` — Fail on warnings (not just errors)
+- `-h, --help` — Show help message
 
-**Checks:**
-- [ ] All core docs exist (HARNESS, FEATURE_INTAKE, ARCHITECTURE, etc.)
-- [ ] Story files reference valid product docs
-- [ ] TEST_MATRIX has proof links
-- [ ] Decision records follow naming convention
-- [ ] No broken links in stories
-- [ ] AGENTS.md Source of Truth hierarchy complete
+**Checks performed:**
+1. Core docs exist (HARNESS, FEATURE_INTAKE, ARCHITECTURE, etc.)
+2. All templates present (story, decision, high-risk-story/)
+3. Required folders exist (product/, stories/, decisions/, scripts/)
+4. README files in key folders
+5. Story file naming convention (STORY-001-title format)
+6. TEST_MATRIX.md has content
+7. AGENTS.md has required sections
+8. CLAUDE.md has tech stack info
+9. Git status (bonus check)
 
 **Output:**
 ```
-✅ All checks passed
-❌ 3 issues found:
-  - docs/stories/STORY-001.md references non-existent product/auth.md
-  - docs/TEST_MATRIX.md missing proof for Behavior X
-  - Decision 0042 should be 0004 (sequence broken)
+✅ All checks passed! Harness is healthy.
+
+OR
+
+⚠️  Harness has 3 issue(s) but no failures.
+
+Recommendations:
+  1. Review warnings above
+  2. Run with --fix to auto-correct
+  3. Run with --strict to fail on warnings
 ```
 
-**Status:** 🚧 Coming soon (Task #12)
+**Examples:**
+```bash
+# Run validation
+./scripts/validate-harness.sh
+
+# Auto-fix issues
+./scripts/validate-harness.sh --fix
+
+# Strict mode (fail on warnings)
+./scripts/validate-harness.sh --strict
+```
+
+**Status:** ✅ Complete (Task #12)
 
 ---
 
