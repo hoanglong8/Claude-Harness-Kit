@@ -54,8 +54,8 @@ fi
 
 # 5. Git status summary
 if git rev-parse --git-dir > /dev/null 2>&1; then
-    local branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
-    local ahead=$(git rev-list --count origin/main..HEAD 2>/dev/null || echo "0")
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+    ahead=$(git rev-list --count origin/main..HEAD 2>/dev/null || echo "0")
 
     if [[ "$ahead" -gt 0 ]]; then
         echo -e "${YELLOW}📊 Git Status:${NC}"
