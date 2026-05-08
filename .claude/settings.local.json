@@ -4,7 +4,24 @@
       "PowerShell(head *)",
       "PowerShell(Get-ChildItem -Path . -Recurse -Depth 3 -Directory | Select-Object -ExpandProperty FullName | ForEach-Object { $_.Substring\\(\\(Get-Location\\).Path.Length + 1\\) } | Sort-Object | Select-Object -First 80)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(unzip -p harness-init.skill harness-init-skill/SKILL.md)",
+      "Read(//tmp/**)",
+      "Bash(unzip *)",
+      "Bash(mkdir -p harness-init-skill-updated/scripts)",
+      "Bash(cp SKILL_updated.md harness-init-skill-updated/SKILL.md)",
+      "Bash(cp harness_init_updated.py harness-init-skill-updated/scripts/harness_init.py)",
+      "Bash(chmod +x harness-init-skill-updated/scripts/harness_init.py)",
+      "Bash(cp harness-init-skill/benchmark.json harness-init-skill-updated/)",
+      "Bash(mkdir -p harness-init-skill-updated/evals)",
+      "Bash(cp harness-init-skill/evals/evals.json harness-init-skill-updated/evals/)",
+      "Bash(chmod +x scripts/scaffold-story.sh)",
+      "Bash(bash ~/../../Users/Admin/.claude/.claude/Claude-Harness-Kit/scripts/scaffold-story.sh \"TEST-001\" \"User authentication\" normal)",
+      "Bash(chmod +x scripts/validate-harness.sh)",
+      "Bash(bash scripts/validate-harness.sh)",
+      "Bash(chmod +x *)",
+      "Bash(bash .claude/hooks/session-start.sh)",
+      "Bash(bash *)"
     ]
   }
 }
