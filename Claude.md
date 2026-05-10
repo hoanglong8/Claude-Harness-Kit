@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-05-03 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-05-10 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -34,22 +34,25 @@
 - Reference file bằng đường dẫn, không paste nội dung vào chat
 
 **Slash Commands hay dùng:**
-- `/task-list` — Xem tasks hiện tại
-- `/task-create` — Tạo task mới
-- `/task-update <id>` — Cập nhật task
 - `/compact "focus on [X]"` — Nén context khi ~70%
 - `/memory` — Duyệt & quản lý memory
-- `/review` — Review PR
-- `/security-review` — Kiểm tra bảo mật
+- `/review` — Review PR (project hiện tại)
+- `/ultrareview` — Review toàn bộ branch (multi-agent, cloud, có phí); `/ultrareview <PR#>` cho GitHub PR
+- `/security-review` — Kiểm tra bảo mật branch hiện tại
+- `/init` — Khởi tạo CLAUDE.md mới cho project
+- `/update-config` — Cấu hình settings.json, hooks, permissions
+- `/simplify` — Review code quality sau khi thay đổi
+- `/fewer-permission-prompts` — Tối ưu allowlist, giảm popup phê duyệt
+- `/loop <interval> <cmd>` — Chạy lặp lại (monitoring, polling)
 - `/help` — Hỏi trợ giúp
-- `/model <name>` — Đổi model (opus, sonnet, haiku)
+- `/model <name>` — Đổi model (opus-4.7, sonnet-4.6, haiku-4.5)
 
 ---
 
 ## 4. KIẾN TRÚC CLAUDE CODE (source leak 31/3/2026 — đã kiểm chứng)
 
 | Thành phần | Chi tiết |
-|-----------|---------|
+|-----------|----------|
 | QueryEngine | ~46K dòng — xử lý toàn bộ API calls, streaming, caching |
 | Tool System | 60+ tools; ~18 ẩn, chỉ xuất hiện qua ToolSearch khi gọi đúng tên |
 | Multi-agent | COORDINATOR_MODE: 1 orchestrator điều phối N Claude worker |
@@ -58,7 +61,7 @@
 
 Tính năng chưa release (feature-flagged):
 KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE
-WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
+WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 
 ---
 
@@ -69,6 +72,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 - Dùng @.claude/rules/file.md để import chi tiết, tránh phình file chính
 - 3 cấp: ~/.claude/CLAUDE.md (global) · ./CLAUDE.md (project, commit git) · CLAUDE.local.md (cá nhân, không commit)
 - **Tạo project-level CLAUDE.md khi:** project có tech stack riêng, linting rules, naming conventions, deploy process cần ghi lại
+- **Linux case-sensitive:** luôn đặt tên `CLAUDE.md` (all-caps), không dùng `Claude.md`
 
 **Memory:**
 - Auto memory lưu tại: ~/.claude/projects/<project>/memory/MEMORY.md
@@ -121,7 +125,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 | 7 | AI Agent cho Đảng ủy Việt Hưng | Đảng ủy phường Việt Hưng | TBD | 🔄 |
 | 8 | Big Data cho Bệnh viện Văn Định | Bệnh viện Văn Định | TBD | 🔄 |
 
-### **Dự án Triển khai tại Lào (2)**
+### **Dự án Triển khai tại Lào (3)**
 | # | Project | Client | Folder | Status |
 |---|---------|--------|--------|--------|
 | 9 | Chatbot Agent TPLUS | TPLUS Laos | D:\FoxAI\SRC Chatbot Agent TPLUS Laos\ | 🚀 |
@@ -133,9 +137,9 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 |---|---------|--------|--------|--------|
 | 12 | Big Data cho Đảng ủy Vân Đồn | Đảng ủy phường Vân Đồn | TBD | 💼 Opportunity |
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
-| 14 | Big Data cho APBank | APBank (Laos) | TBD | 💼 Opportunity |
+| 14 | Big Data cho APBook | APBook (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-05-03 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+> Cập nhật: 2026-05-10 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ---
 
