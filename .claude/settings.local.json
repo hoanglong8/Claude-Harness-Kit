@@ -21,7 +21,9 @@
       "Bash(bash scripts/validate-harness.sh)",
       "Bash(chmod +x *)",
       "Bash(bash .claude/hooks/session-start.sh)",
-      "Bash(bash *)"
+      "Bash(bash *)",
+      "Bash(git push *)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
