@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-05-10 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-05-17 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -139,9 +139,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
 | 14 | Big Data cho APBook | APBook (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-05-10 | **11 dự án triển khai + 3 cơ hội kinh doanh**
-
----
+> Cập nhật: 2026-05-17 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ## 8. FILES THAM KHẢO
 
