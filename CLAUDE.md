@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-05-17 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-05-24 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -46,6 +46,13 @@
 - `/loop <interval> <cmd>` — Chạy lặp lại (monitoring, polling)
 - `/help` — Hỏi trợ giúp
 - `/model <name>` — Đổi model (opus-4.7, sonnet-4.6, haiku-4.5)
+- `/simplify` — Review code quality sau khi thay đổi
+- `/keybindings-help` — Tùy chỉnh keyboard shortcuts (`~/.claude/keybindings.json`)
+- `/claude-api` — Build/debug apps với Claude API & Anthropic SDK (caching, tools, batch, migrate models 4.5→4.6→4.7)
+- `/session-start-hook` — Tạo SessionStart hook để setup môi trường khi mở Claude Code trên web
+- `/verify` — Xác nhận change hoạt động đúng bằng cách chạy app thực tế
+- `/code-review` — Review diff, tìm correctness bugs; `--comment` để post inline PR comments
+- `/run` — Khởi động app và kiểm tra thay đổi hoạt động trong app thực
 
 ---
 
@@ -98,17 +105,6 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 - **Gmail, Google Calendar** — Cần OAuth authenticate lần đầu
 - **Notion, Slack** — Đọc/viết pages, messages, threads
 
-**Recommended Skills:**
-- `/update-config` — Cấu hình settings.json, hooks, permissions
-- `/loop <interval> <cmd>` — Chạy lặp lại (monitoring, polling)
-- `/simplify` — Review code quality sau khi thay đổi
-- `/security-review` — Kiểm tra bảo mật branch hiện tại
-- `/init` — Khởi tạo CLAUDE.md mới cho project
-- `/keybindings-help` — Tùy chỉnh keyboard shortcuts (`~/.claude/keybindings.json`)
-- `/fewer-permission-prompts` — Tối ưu allowlist, giảm popup phê duyệt
-- `/claude-api` — Build/debug apps với Claude API & Anthropic SDK (caching, tools, batch, migrate models 4.5→4.6→4.7)
-- `/session-start-hook` — Tạo SessionStart hook để setup môi trường khi mở Claude Code trên web
-
 ---
 
 ## 7. DANH SÁCH PROJECTS & OPPORTUNITIES (14 items)
@@ -139,7 +135,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
 | 14 | Big Data cho APBook | APBook (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-05-17 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+> Cập nhật: 2026-05-24 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ## 8. FILES THAM KHẢO
 
