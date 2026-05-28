@@ -1,64 +1,84 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-05-03 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-05-19 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
 ## 1. THÔNG TIN CÁ NHÂN
 
-- **Tên:** Nguyễn Hoàng Long | Delivery Center Director | FOXAI,.JSC (fox.ai.vn)
-- **Ngôn ngữ:** Luôn trả lời tiếng Việt, thuật ngữ kỹ thuật gốc thì giữ nguyên tiếng Anh và đặt thuật ngữ đã dịch ra tiếng Việt ở trong dấu ngoặc đơn.
-- **Trình độ kỹ thuật:** Quản lý dự án (PM), Quản lý sản phẩm (PO), phân tích nghiệp vụ (BA), kỹ sư tư vấn giải pháp Solution Architect và không lập trình trực tiếp.
+- **Tên:** Nguyễn Hoàng Long | Delivery Center Director | FOXAI, JSC (fox.ai.vn)
+- **Ngôn ngữ:** Luôn trả lời tiếng Việt, thuật ngữ kỹ thuật gốc thì giữ nguyên tiếng Anh (trong dấu ngoặc đơn là dịch)
+- **Trình độ kỹ thuật:** PM/PO/BA/Solution Architect — không lập trình trực tiếp
 - **Phong cách làm việc:**
-  - Giải thích kỹ thuật bằng ngôn ngữ dễ hiểu cho người quản lý
-  - Khi có nhiều lựa chọn: nêu rõ trade-off về chi phí, rủi ro, thời gian
-  - Ưu tiên giải pháp thực tế, triển khai được ngay với team hiện tại FOXAI (nhân sự mới, kiêm nhiệm nhiều)
-  - Thẳng thắn chỉ ra vấn đề, không cần né tránh
+  - Giải thích kỹ thuật dễ hiểu cho quản lý
+  - Nêu rõ trade-off: chi phí, rủi ro, thời gian
+  - Ưu tiên giải pháp thực tế với team FOXAI (nhân sự mới, kiêm nhiệm)
+  - Thẳng thắn chỉ ra vấn đề
 
 ---
 
 ## 2. QUY TẮC CONTEXT & SESSION
 
-- Mỗi session = **1 mục tiêu cụ thể** — xong việc mở session mới
+- Mỗi session = **1 mục tiêu cụ thể** → xong việc mở session mới
 - Compact **chủ động** khi context ~70%: `/compact "focus on [X]"`
-- Dùng `claude -c` để tiếp tục session cũ thay vì bắt đầu lại
-- **CLAUDE.md sống sót qua compaction** — ghi rule vào đây, đừng chỉ nói trong chat
+- Tiếp tục session cũ: `claude -c` (thay vì bắt đầu lại)
+- **CLAUDE.md sống sót qua compaction** → ghi rule vào đây, không chỉ nói trong chat
 
 ---
 
 ## 3. QUY TẮC TOOL & WORKFLOW
 
-- Gọi **tên tool cụ thể** khi muốn dùng: `"Dùng LSP để tìm references của X"`
-- Workflow chuẩn cho mọi task lớn: **Explore → Plan → Execute** (không bỏ bước Plan)
-- Task bị dừng giữa chừng: prompt `"Continue từ [điểm X]"` — không hỏi lại từ đầu
-- Reference file bằng đường dẫn, không paste nội dung vào chat
+- Gọi **tên tool cụ thể**: `"Dùng Grep để tìm X"` (không mơ hồ)
+- Workflow chuẩn: **Explore → Plan → Execute** (không bỏ bước Plan)
+- Continue giữa chừng: `"Continue từ [điểm X]"` (không hỏi lại từ đầu)
+- Reference file: đường dẫn (không paste nội dung vào chat)
 
-**Slash Commands hay dùng:**
-- `/task-list` — Xem tasks hiện tại
-- `/task-create` — Tạo task mới
-- `/task-update <id>` — Cập nhật task
+**Token-saving tool rules:**
+- PDF: dùng `pdftotext` CLI, **không** dùng `Read` (Read load PDF như ảnh = tốn x5 token)
+- Web fetch: ưu tiên `WebFetch` (free, text-only) → `agent-browser` CLI khi cần dynamic page/auth wall (~82% ít token hơn screenshot tools) → nếu cùng fetch pattern xuất hiện >1 lần, propose wrap thành dedicated tool
+- Subagent model: Haiku (bulk/cơ học) · Sonnet (research có scope) · Opus (planning/trade-off phức tạp)
+- Spawn subagent khi: isolate context, parallelize, bulk tasks — KHÔNG spawn khi parent cần reasoning
+- Subagent escalation: nếu subagent nhận ra cần tier cao hơn → return về parent, không tự upgrade
+
+**Patterns lặp lại — bake in từ session analysis (2026-05-19):**
+- Request "đọc repo / rà soát / bổ sung": **Explore README + cấu trúc thư mục trước** — không skip dù repo quen
+- Request "viết tài liệu" cho dự án: hỏi rõ **đối tượng đọc + format output** trước khi viết
+- Khi làm việc với Claude repo cá nhân: đọc CLAUDE.md + memory hiện tại trước khi thay đổi
+
+**Slash Commands thường dùng:**
+- `/task-list`, `/task-create`, `/task-update <id>` — Quản lý tasks
+- `/memory` — Duyệt & quản lý auto-memory
 - `/compact "focus on [X]"` — Nén context khi ~70%
-- `/memory` — Duyệt & quản lý memory
-- `/review` — Review PR
-- `/security-review` — Kiểm tra bảo mật
-- `/help` — Hỏi trợ giúp
-- `/model <name>` — Đổi model (opus, sonnet, haiku)
+- `/review`, `/security-review` — Review PR/branch
+- `/model <opus|sonnet|haiku>` — Đổi model
+- `/update-config`, `/loop`, `/schedule` — Config & automation
+
+**Auto-Memory Commands:**
+```bash
+# Xem stats của project hiện tại
+bash ~/.claude/bin/auto-memory-system.sh stats
+
+# Khởi tạo memory cho project mới
+bash ~/.claude/bin/auto-memory-system.sh init
+
+# Liệt kê tất cả projects có memory
+bash ~/.claude/bin/auto-memory-system.sh list-projects
+```
 
 ---
 
-## 4. KIẾN TRÚC CLAUDE CODE (source leak 31/3/2026 — đã kiểm chứng)
+## 4. KIẾN TRÚC CLAUDE CODE (verified 31/3/2026)
 
 | Thành phần | Chi tiết |
 |-----------|---------|
-| QueryEngine | ~46K dòng — xử lý toàn bộ API calls, streaming, caching |
-| Tool System | 60+ tools; ~18 ẩn, chỉ xuất hiện qua ToolSearch khi gọi đúng tên |
-| Multi-agent | COORDINATOR_MODE: 1 orchestrator điều phối N Claude worker |
-| Output retry | Tự inject "Resume directly" — tối đa 3 lần, sau đó dừng hẳn (thiết kế, không phải bug) |
-| Compaction | Kích hoạt ~83.5% context; giữ code/task, mất convention nói trong chat |
+| **QueryEngine** | ~46K LOC — xử lý API calls, streaming, caching |
+| **Tool System** | 60+ tools; ~18 ẩn — chỉ xuất hiện khi gọi đúng tên |
+| **Multi-agent** | COORDINATOR_MODE: 1 orchestrator điều phối N Claude workers |
+| **Output retry** | Auto-inject "Resume directly" — max 3 lần, sau đó dừng |
+| **Compaction** | Kích hoạt ~83.5% context; giữ code/task, mất convention |
 
-Tính năng chưa release (feature-flagged):
-KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE
-WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
+**Tính năng chưa release (feature-flagged):**
+KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE · WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 
 ---
 
@@ -66,81 +86,89 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
 
 **CLAUDE.md:**
 - Giữ < 150 dòng — ngắn gọn tuân thủ tốt hơn dài
-- Dùng @.claude/rules/file.md để import chi tiết, tránh phình file chính
-- 3 cấp: ~/.claude/CLAUDE.md (global) · ./CLAUDE.md (project, commit git) · CLAUDE.local.md (cá nhân, không commit)
-- **Tạo project-level CLAUDE.md khi:** project có tech stack riêng, linting rules, naming conventions, deploy process cần ghi lại
+- 3 cấp: `~/.claude/CLAUDE.md` (global) · `./CLAUDE.md` (project, commit) · `CLAUDE.local.md` (cá nhân, không commit)
+- Tạo project-level CLAUDE.md khi: tech stack riêng, linting rules, naming conventions, deploy process cần ghi lại
 
 **Memory:**
-- Auto memory lưu tại: ~/.claude/projects/<project>/memory/MEMORY.md
-- Chỉ 200 dòng đầu được auto-load — giữ index ngắn gọn
-- Dùng /memory để browse, edit, xóa memory sai trong session
+- Lưu tại: `~/.claude/projects/<project>/memory/MEMORY.md`
+- Chỉ 200 dòng đầu auto-load → giữ index ngắn gọn
+- Dùng `/memory` để browse, edit, xóa sai trong session
 
 **Hooks:**
-- Hooks > CLAUDE.md cho rule phải thực thi 100%, không có ngoại lệ
-- Hook quan trọng nhất: PreCompact — snapshot trạng thái trước khi nén context
-- Cấu hình tại: .claude/settings.json theo pattern Event → Matcher → Command
+- Hooks > CLAUDE.md cho rule phải thực thi 100%
+- Hook quan trọng: **PreCompact** — snapshot state trước nén context
+- Config tại: `.claude/settings.json` (pattern: Event → Matcher → Command)
 
 ---
 
-## 6. RESOURCES & INTEGRATIONS
+## 6. BA & DOCUMENTATION FRAMEWORK
 
-**MCP Servers khả dụng:**
-- **GitHub** — Quản lý PR, issues, commits, branches, CI status trên GitHub
-  - Repo scope: hoanglong8/claude-harness-kit
-  - Dùng khi: tạo PR, review code, xem CI, tạo issue
-- **Hugging Face Hub** — Tìm models, datasets, papers trên huggingface.co
-  - User: hoanglong208
-  - Dùng khi: tìm model AI, dataset, hoặc paper research
-- **Gmail, Google Calendar** — Cần OAuth authenticate lần đầu
-- **Notion, Slack** — Đọc/viết pages, messages, threads
+**Auto-Reminder khi nói keywords:**
+- "viết tài liệu" / "BA" / "framework" / "glossary" / "specification"
+- Tôi auto-suggest 4 câu hỏi + template phù hợp
+
+**Templates:**
+- Business Vision / Business Model Canvas
+- Ubiquitous Language Glossary
+- Event Storming Results
+- Implementation Roadmap
+- Bounded Context Canvas
+- Process Flow / Use Case
+
+**Guide:** `~/.claude/guides/BA-DOCUMENT-FRAMEWORK.md`
+
+---
+
+## 7. RESOURCES & INTEGRATIONS
+
+**MCP Servers:**
+- **Hugging Face Hub** — tìm models, datasets, papers (user: hoanglong208)
+- **Gmail, Google Calendar** — OAuth authenticate lần đầu
+- **Notion, Slack** — đọc/viết pages, messages
 
 **Recommended Skills:**
-- `/update-config` — Cấu hình settings.json, hooks, permissions
-- `/loop <interval> <cmd>` — Chạy lặp lại (monitoring, polling)
-- `/simplify` — Review code quality sau khi thay đổi
-- `/security-review` — Kiểm tra bảo mật branch hiện tại
-- `/init` — Khởi tạo CLAUDE.md mới cho project
-- `/keybindings-help` — Tùy chỉnh keyboard shortcuts (`~/.claude/keybindings.json`)
-- `/fewer-permission-prompts` — Tối ưu allowlist, giảm popup phê duyệt
-- `/claude-api` — Build/debug apps với Claude API & Anthropic SDK (caching, tools, batch, migrate models 4.5→4.6→4.7)
-- `/session-start-hook` — Tạo SessionStart hook để setup môi trường khi mở Claude Code trên web
+- `/update-config` — settings.json, hooks, permissions
+- `/loop <interval> <cmd>` — chạy lặp lại (monitoring)
+- `/schedule` — scheduled remote agents
+- `/simplify` — review code quality
+- `/security-review` — kiểm tra bảo mật
+- `/claude-api` — build/debug Claude API apps
 
 ---
 
-## 7. DANH SÁCH PROJECTS & OPPORTUNITIES (14 items)
+## 8. BMAD SURVEY FRAMEWORK
 
-### **Dự án Triển khai tại Việt Nam (8)**
-| # | Project | Client | Folder | Status |
-|---|---------|--------|--------|--------|
-| 1 | AI Agent cho Sở KHCN Hà Nội | Sở Khoa học & Công nghệ Hà Nội | D:\FoxAI\Dự án Sở KHCN HN | 🔄 |
-| 2 | AI Agent cho Sở KHCN Lào Cai | Sở Khoa học & Công nghệ Lào Cai | TBD | 🔄 |
-| 3 | AI Agent cho Văn phòng Chính phủ | Văn phòng Chính phủ VPCP | D:\FoxAI\Dự án VPCP | 🔄 |
-| 4 | AI Agent cho H05 cục CNTT | H05 Cục CNTT - Bộ Công An | TBD | 🔄 |
-| 5 | AI Agent cho Bệnh viện A | Bệnh viện A Thái Nguyên | TBD | 🔄 |
-| 6 | Big Data cho TTDL Agribank | Ngân hàng Agribank | TBD | 🔄 |
-| 7 | AI Agent cho Đảng ủy Việt Hưng | Đảng ủy phường Việt Hưng | TBD | 🔄 |
-| 8 | Big Data cho Bệnh viện Văn Định | Bệnh viện Văn Định | TBD | 🔄 |
+**BMAD = Breakthrough Method of Agile AI-driven Development**
 
-### **Dự án Triển khai tại Lào (2)**
-| # | Project | Client | Folder | Status |
-|---|---------|--------|--------|--------|
-| 9 | Chatbot Agent TPLUS | TPLUS Laos | D:\FoxAI\SRC Chatbot Agent TPLUS Laos\ | 🚀 |
-| 10 | Chatbot Agent cho LaoVietBank | LaoVietBank | TBD | 🔄 |
-| 11 | KPI CRM cho LaoVietBank | LaoVietBank | TBD | 🔄 |
+Mỗi request mới: dùng **BMAD Survey Checklist** để khảo sát context trước execute:
 
-### **Cơ hội Kinh doanh (3) 💼**
-| # | Project | Client | Folder | Status |
-|---|---------|--------|--------|--------|
-| 12 | Big Data cho Đảng ủy Vân Đồn | Đảng ủy phường Vân Đồn | TBD | 💼 Opportunity |
-| 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
-| 14 | Big Data cho APBank | APBank (Laos) | TBD | 💼 Opportunity |
+**Quick Survey (30s):**
+```
+1. Type? (Feature / Bug / Refactor / Architecture / Analysis)
+2. Complexity? (Simple / Complex / Enterprise)
+3. Phase? (Analysis / Planning / Solutioning / Implementation / Retrospective)
+4. Requirements rõ? (FRs/NFRs/Scope/Timeline định nghĩa)
+5. Stakeholders/Context? (Biết ai approve, ai implement, tech stack)
+```
 
-> Cập nhật: 2026-05-03 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+**Nếu ≥1 không rõ:**
+→ Suggest Analysis workflow (Brainstorm / Research / Brief / PRFAQ)
+→ Hoặc trigger Planning phase trước Implementation
+
+Full framework: `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md`
 
 ---
 
-## 8. FILES THAM KHẢO
+## 9. DANH SÁCH PROJECTS & FILES THAM KHẢO
 
-- **CLI Cheatsheet:** `~/.claude/CLAUDE_CLI_CHEATSHEET.md` — Quick reference cho lệnh & shortcuts
-- **Project-level:** `./CLAUDE.md` — Rules cụ thể cho từng project
-- **Local-only:** `./CLAUDE.local.md` — Config cá nhân (không commit)
+**Projects (14 items):**
+- Dự án Triển khai VN: Sở KHCN HN, Lào Cai, VPCP, Công An, Bệnh viện A, Agribank, Việt Hưng, Văn Định
+- Dự án Lào: TPLUS, LaoVietBank
+- Cơ hội KD: Vân Đồn, LDBank, APBank
+
+**Files Tham Khảo:**
+- `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md` — BMAD survey & workflows
+- `~/.claude/guides/BA-DOCUMENT-FRAMEWORK.md` — BA document templates
+- `~/.claude/CLAUDE_QUICK_COMMANDS.md` — Quick reference
+- `./CLAUDE.md` — Project-level rules (nếu có)
+- `./CLAUDE.local.md` — Personal config (không commit)
