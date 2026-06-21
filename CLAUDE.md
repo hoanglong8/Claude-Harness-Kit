@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-06-14 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-06-21 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -48,7 +48,7 @@
 - `/model <name>` — Đổi model (fable-5, opus-4.8, sonnet-4.6, haiku-4.5)
 - `/deep-research` — Deep research đa nguồn, fact-check, sinh báo cáo có trích dẫn
 - `/keybindings-help` — Tùy chỉnh keyboard shortcuts (`~/.claude/keybindings.json`)
-- `/claude-api` — Build/debug apps với Claude API & Anthropic SDK (caching, tools, batch, migrate models 4.5→4.6→4.7)
+- `/claude-api` — Build/debug apps với Claude API & Anthropic SDK (caching, tools, batch, migrate models 4.5→4.6→4.8)
 - `/session-start-hook` — Tạo SessionStart hook để setup môi trường khi mở Claude Code trên web
 - `/verify` — Xác nhận change hoạt động đúng bằng cách chạy app thực tế
 - `/code-review` — Review diff, tìm correctness bugs; `--comment` để post inline PR comments
@@ -135,7 +135,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
 | 14 | Big Data cho APBook | APBook (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-06-14 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+> Cập nhật: 2026-06-21 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ## 8. FILES THAM KHẢO
 
