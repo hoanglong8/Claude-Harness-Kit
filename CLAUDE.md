@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-06-21 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-06-28 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -68,7 +68,9 @@
 
 Tính năng chưa release (feature-flagged):
 KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE
-WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
+PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
+
+✅ Đã release: WORKFLOW_SCRIPTS (Workflow tool hoạt động từ 2026-06)
 
 ---
 
@@ -135,7 +137,7 @@ WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
 | 14 | Big Data cho APBook | APBook (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-06-21 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+> Cập nhật: 2026-06-28 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ## 8. FILES THAM KHẢO
 
