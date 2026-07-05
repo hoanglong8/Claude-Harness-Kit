@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-06-28 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-07-05 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -53,6 +53,7 @@
 - `/verify` — Xác nhận change hoạt động đúng bằng cách chạy app thực tế
 - `/code-review` — Review diff, tìm correctness bugs; `--comment` để post inline PR comments
 - `/run` — Khởi động app và kiểm tra thay đổi hoạt động trong app thực
+- `/dataviz` — Tạo chart, graph, dashboard với thiết kế nhất quán (light/dark, accessible)
 
 ---
 
@@ -137,7 +138,7 @@ PROACTIVE · SSH_REMOTE · AGENT_TRIGGERS
 | 13 | Big Data cho LDBank | LDBank (Laos) | TBD | 💼 Opportunity |
 | 14 | Big Data cho APBook | APBook (Laos) | TBD | 💼 Opportunity |
 
-> Cập nhật: 2026-06-28 | **11 dự án triển khai + 3 cơ hội kinh doanh**
+> Cập nhật: 2026-07-05 | **11 dự án triển khai + 3 cơ hội kinh doanh**
 
 ## 8. FILES THAM KHẢO
 
