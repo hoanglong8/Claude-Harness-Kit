@@ -1,9 +1,18 @@
 {
   "hooks": {
-    "SessionStart": {
-      "description": "Session start reminder for pending phases",
-      "command": "bash .claude/hooks/session-start.sh",
-      "enabled": true
-    }
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/session-start.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/fable-mindset.sh"
+          }
+        ]
+      }
+    ]
   }
 }
