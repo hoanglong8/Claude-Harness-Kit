@@ -1,33 +1,18 @@
 ---
-description: Khai thác yêu cầu trước khi làm deliverable lớn (tài liệu >5 trang, cost model, slide deck, proposal)
-argument-hint: [mô tả deliverable]
+description: Structured intake before producing a large deliverable (document, cost model, slide deck) — FOXAI standard practice
 ---
 
-Người dùng sắp yêu cầu (hoặc vừa yêu cầu) một deliverable lớn: $ARGUMENTS
+A large deliverable has been requested: $ARGUMENTS
 
-KHÔNG sinh bất kỳ nội dung nào của deliverable trước khi hoàn thành intake
-này. Hỏi người dùng MỘT LẦN, gộp tất cả câu hỏi vào một message (dùng
-AskUserQuestion nếu có), chỉ hỏi những mục chưa suy ra được từ context:
+Before producing ANY content, run structured intake. Ask the following battery in **one compact Vietnamese message**, numbered. Skip items already answered in the conversation — restate those as confirmed assumptions instead of re-asking.
 
-1. **Đối tượng & mục đích** — Ai đọc/duyệt (lãnh đạo tỉnh, CTO khách hàng,
-   team kỹ thuật)? Deliverable dùng để làm gì (thắng thầu, xin chủ trương,
-   hướng dẫn triển khai)?
-2. **Phạm vi & độ sâu** — Bao phủ những phần nào, bỏ qua phần nào? Mức độ
-   kỹ thuật: quản lý hay kỹ sư?
-3. **Ràng buộc** — Ngân sách, timeline, công nghệ bắt buộc/cấm, chuẩn phải
-   tuân thủ (Nghị định 13, TCVN, chuẩn ngành)?
-4. **Nguồn dữ liệu có sẵn** — Tài liệu, số liệu, template, dự án tương tự
-   nào đã có? Ở đâu? Số liệu nào được phép ước tính, số liệu nào phải chính
-   xác có nguồn?
-5. **Format bàn giao & tiêu chí thành công** — Word/PDF/slide, số trang
-   mục tiêu, deadline, ai duyệt cuối, và "đạt" nghĩa là gì?
+1. **Người nhận & bối cảnh sử dụng:** Ai đọc / duyệt tài liệu này? Dùng trong tình huống nào (họp trình bày, hồ sơ thầu, tư vấn nội bộ, gửi khách hàng)?
+2. **Mục tiêu:** Tài liệu này phải đạt được điều gì thì được coi là thành công?
+3. **Phạm vi & độ dài:** Bao nhiêu trang / slide / sheet? Những phần bắt buộc phải có? Những phần chắc chắn không cần?
+4. **Định dạng & chuẩn:** DOCX / XLSX / PPTX / PDF? Branding FOXAI? Chuẩn văn bản hành chính theo Nghị định 30/2020/NĐ-CP (nếu áp dụng)?
+5. **Nguồn dữ liệu:** Số liệu lấy từ đâu? Phần nào tôi được phép ước tính (sẽ đánh dấu rõ "(ước tính)"), phần nào bắt buộc dùng số thật do anh/chị cung cấp?
+6. **Ràng buộc:** Deadline; thông tin nhạy cảm cần tránh; thông điệp bắt buộc phải có hoặc không được xuất hiện?
 
-Sau khi có câu trả lời:
+After the answers arrive: restate the confirmed spec in ≤10 lines and get a "chốt" (explicit confirmation) **before** producing.
 
-- Tóm tắt lại hiểu biết trong ≤10 dòng.
-- Liệt kê "Giả định:" cho mọi khoảng trống còn lại.
-- Đề xuất outline (mục lục) và chờ người dùng xác nhận outline rồi mới
-  viết nội dung.
-
-Nếu người dùng trả lời "cứ làm đi, không cần hỏi": ghi rõ toàn bộ giả định
-đang dùng ở đầu deliverable dưới mục "Giả định:", rồi tiến hành.
+If the user explicitly waives intake ("cứ làm luôn", "không cần hỏi"): proceed, but place a visible "**Giả định:**" block at the top of the deliverable listing every assumption you made in place of their answers.

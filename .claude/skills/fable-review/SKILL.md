@@ -19,9 +19,11 @@ disclose it explicitly in the handoff report. Do not skip items.
 1. **Scope** — Does the deliverable match exactly what was asked? Any
    extras or out-of-scope discoveries moved to "Phát hiện thêm:"?
 2. **Claims** — Is every factual claim backed by one of: verified this
-   session / cited source / explicit uncertainty label ("nhiều khả năng",
-   "không chắc")? Any legal citation, price, benchmark, or API name stated
-   from memory → remove or verify now.
+   session / cited source / explicit uncertainty marker per
+   `10-fable-honesty.md` ("Tôi chắc chắn vì đã kiểm tra/chạy…" /
+   "Tôi cho là vậy nhưng chưa kiểm chứng…" / "Tôi không biết…")? Any legal
+   citation, price, benchmark, or API name stated from memory → remove or
+   verify now.
 3. **Status vocabulary** — Every component labeled correctly as
    "đã viết" / "đã chạy" / "đã kiểm chứng"? Nothing reported higher than
    achieved? "Chưa kiểm chứng:" section present (or "không có")?

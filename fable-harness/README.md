@@ -55,7 +55,7 @@ Cơ chế nạp của từng thành phần:
 
 | Thành phần | Khi nào vào context | Chi phí token (ước tính) |
 |---|---|---|
-| `rules/fable/*.md` | Mỗi phiên, tự động, ưu tiên ngang CLAUDE.md | ~1.700–2.000 token, thường trực (đo thực tế: 1.312 từ) |
+| `rules/fable/*.md` | Mỗi phiên, tự động, ưu tiên ngang CLAUDE.md | ~1.900 token, thường trực (đo thực tế: 1.477 từ) |
 | Hook SessionStart | Đầu mỗi phiên | ~150 token, 1 lần/phiên |
 | Skill `fable-review` | Chỉ khi được gọi/kích hoạt | ~600 token, theo lần dùng |
 | Subagents | Chạy trong context riêng | không tốn context phiên chính (chỉ nhận kết quả về) |
