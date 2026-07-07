@@ -2,7 +2,17 @@
 
 > Bộ skill + harness dạy Opus (hoặc bất kỳ model Claude nào) suy nghĩ và hành
 > xử theo kỷ luật của Fable 5.
-> Tạo: 2026-07-06
+> Tạo: 2026-07-06 · Cập nhật: 2026-07-07 (hợp nhất với gói `fable-harness/`)
+
+> **⚠️ Cập nhật quan trọng (2026-07-07):** Tầng always-on của guide này
+> (`.claude/rules/fable-mindset.md` + hook `fable-mindset.sh`) đã được
+> **thay thế** bởi gói `fable-harness/` — đầy đủ hơn (7 rules tự nạp,
+> guard hook chặn lệnh phá hủy, `/intake`, skill `fable-review`, agents
+> `fable-critic`/`fable-verifier`) và cài được vào mọi project FOXAI bằng
+> `bash fable-harness/INSTALL.sh /duong/dan/project`. Xem
+> `fable-harness/README.md`. Những gì còn hiệu lực trong guide này: skill
+> `/fable-mindset` (tài liệu dạy, nạp theo yêu cầu) và agent
+> `opus-as-fable` (delegate task cho Opus với system prompt kiểu Fable).
 
 ---
 

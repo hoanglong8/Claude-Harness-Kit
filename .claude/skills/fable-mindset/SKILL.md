@@ -99,15 +99,19 @@ can provide.
 
 ## Installing as Always-On Harness
 
-This skill is the teaching document. To make the behavior persistent:
+This skill is the teaching document, loaded on demand. The persistent
+(always-on) layer is the **fable-harness package** at `fable-harness/` in
+this repo — 7 auto-loaded rules files, a SessionStart anchor hook, a
+PreToolUse guard for destructive Bash commands, the `/intake` command, the
+`fable-review` skill, and the `fable-critic` / `fable-verifier` subagents.
+Install it into any FOXAI project with:
 
-1. **Rules import** — add `@.claude/rules/fable-mindset.md` to the project
-   CLAUDE.md (condensed always-on version, survives compaction).
-2. **SessionStart hook** — `.claude/hooks/fable-mindset.sh` injects the
-   checklist into context on every new session (registered in
-   `.claude/settings.json`).
-3. **Subagent** — `.claude/agents/opus-as-fable.md` defines an Opus worker
-   whose system prompt embeds this mindset; delegate to it when you want
-   Opus throughput with Fable discipline.
+```bash
+bash fable-harness/INSTALL.sh /path/to/project
+```
 
-See `Setup-Guide-Fable-Mindset.md` at the repo root for installation steps.
+For delegation, `.claude/agents/opus-as-fable.md` defines an Opus worker
+whose system prompt embeds this mindset.
+
+See `Setup-Guide-Fable-Mindset.md` at the repo root and
+`fable-harness/README.md` for details.
