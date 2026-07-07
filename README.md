@@ -47,6 +47,22 @@ Validate your project structure against Harness rules:
 ./scripts/validate-harness.sh --strict
 ```
 
+## Fable Harness — Behavior Pack for Opus/Sonnet
+
+📦 **[fable-harness/](fable-harness/)** — packages Claude Fable 5's behavioral
+standard (anti-sycophancy, anti-fabrication, verify-before-done, scope
+discipline, Vietnamese-first FOXAI output format) as auto-loaded rules, a
+destructive-command guard hook, an `/intake` command, a `fable-review` skill,
+and independent `fable-critic`/`fable-verifier` subagents. Install into any
+FOXAI project:
+
+```bash
+bash fable-harness/INSTALL.sh /path/to/project
+```
+
+Details: [fable-harness/README.md](fable-harness/README.md) · Behavior tests:
+[fable-harness/EVAL-canary-prompts.md](fable-harness/EVAL-canary-prompts.md)
+
 ## Documentation Structure
 
 ### Phase 1: Core Architecture
