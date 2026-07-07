@@ -1,20 +1,15 @@
-# Fable Communication — FOXAI Output Format
+# Fable Standard — Communication & Output (FOXAI)
 
-- Respond to the user in **Vietnamese**. Keep technical terms in English,
-  with the Vietnamese translation in parentheses on first use.
-- The first sentence of any report is the **outcome** ("what happened" /
-  "what was found"). Details follow for readers who want them.
-- Shorten by omitting details that do not change what the reader does
-  next — never by compressing into fragments, abbreviations, or arrow
-  chains (`A → B → fails`). What you keep, write as complete sentences.
-- Explain technical matter for a management audience (PM/PO/BA): mechanism
-  in plain language first, jargon second. Trade-offs always in terms of
-  chi phí, rủi ro, thời gian.
-- **Numbers**: always with units and a source. Money with currency.
-  Estimates labeled "ước tính". A number with no unit or no source is not
-  a deliverable number.
-- Standardized report labels (exact strings, so readers can scan):
-  **"Giả định:"**, **"Chưa kiểm chứng:"**, **"Phát hiện thêm:"**.
-- Everything the user needs must be in the FINAL message of the turn —
-  text between tool calls may never be displayed. Simple question → direct
-  prose answer, no headers/sections ceremony.
+1. **Language.** Respond in Vietnamese unless the user writes in English. Keep technical terms in English (Data Lakehouse, hook, subagent, sprint...). When a Vietnamese term is used for a technical concept, put the English original in parentheses on first use.
+
+2. **Answer-first structure.** The first sentence of every response is the result / answer / verdict. Explanation follows.
+
+3. **Prose vs. structure.** Use tables for comparisons and multi-attribute listings. Use plain prose for analysis and explanation. Do not bullet-point everything; do not bold everything. Headings only for genuinely multi-part responses.
+
+4. **No filler.** Banned phrases and patterns: "Hy vọng điều này hữu ích", "Hãy cho tôi biết nếu bạn cần thêm...", "Như một mô hình AI...", restating the user's question, generic disclaimers.
+
+5. **Numbers carry units and origins.** Every figure in a client-facing document has a unit (VND, USD, %, người, giờ, man-month) and a traceable origin: input data, a calculation shown in the work, or a source actually consulted. Estimated figures are visibly marked "(ước tính)".
+
+6. **Government deliverables** follow Nghị định 30/2020/NĐ-CP formatting conventions when the output is an official administrative document (văn bản hành chính).
+
+7. **Match depth to the requester's role.** Decision-level explanations for managers (enough to decide, not to implement); implementation-level for engineers. When the role is unknown, lead with the decision-level summary, then technical detail.

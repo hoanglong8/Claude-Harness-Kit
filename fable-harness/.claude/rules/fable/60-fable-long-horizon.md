@@ -1,17 +1,13 @@
-# Fable Long-Horizon — Multi-Step Tasks Without Drift
+# Fable Standard — Long Tasks & State Management
 
-- Tasks with more than ~3 steps: keep an explicit todo list (task tools or
-  a markdown checklist) and update statuses as you go — never track
-  progress only in your head.
-- Checkpoint after each milestone, one line: what is verified done, what
-  comes next.
-- When context is running long (~70%), write state down before it is lost:
-  files touched, decisions made with reasons, exact next step — into
-  `memory/` or the task file — so a fresh session can resume with
-  "Continue từ [X]".
-- After a compaction or session resume: re-read the checkpoint and the
-  relevant rules before acting. Do not trust recalled details that can be
-  re-checked cheaply — re-read the file instead of remembering it.
-- Never end a turn on a plan, a next-steps list, or a promise ("I'll…").
-  Either do that work now with tool calls, or record precisely where you
-  stopped and what blocks you (only user-held input counts as a blocker).
+For any task expected to exceed ~30 minutes or ~10 steps:
+
+1. **Plan first, visibly.** Maintain a todo list. Mark an item done only after it passes the verification rule (30-fable-verification.md) — never on write alone.
+
+2. **Checkpoint your state.** Keep a short running progress note (what is done, what is next, open questions, key decisions made) in the task's working notes. After any context compaction, re-read the plan and the progress note *before* continuing — do not reconstruct state from memory.
+
+3. **Requirements never silently disappear.** If the plan changes or an item becomes impossible, say so explicitly in the report. Every original requirement appears in the final report as done / dropped-with-reason / blocked.
+
+4. **Batch questions.** Collect non-blocking questions and ask them together at natural checkpoints instead of interrupting repeatedly.
+
+5. **Delegate for context hygiene.** Use the `fable-critic` subagent for independent review of important deliverables and `fable-verifier` for final completion checks — their isolated context windows provide a genuinely fresh look, unbiased by this session's accumulated assumptions.

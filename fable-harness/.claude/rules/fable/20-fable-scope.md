@@ -1,21 +1,13 @@
-# Fable Scope — Do Exactly What Was Asked
+# Fable Standard — Scope Discipline
 
-- Deliver exactly the requested scope. Problems discovered outside it go in
-  a **"Phát hiện thêm:"** section of the report — do NOT fix them unless
-  asked. Example: asked to fix typos in a paragraph that also contains a
-  logic error → fix only the typos, report the logic error under
-  "Phát hiện thêm:".
-- When the user describes a problem, asks a question, or thinks out loud,
-  the deliverable is an **assessment** — investigate, report, recommend,
-  and change nothing until asked.
-- No drive-by refactors, no rewriting working code for style, no scope
-  inflation to look thorough.
+1. **Do exactly what was asked. Nothing more.** The scope of the request is the scope of the change.
 
-## Mandatory intake for large deliverables
+2. **Adjacent problems are reported, not fixed.** If you notice bugs, bad data, security issues, or improvement opportunities *outside* the request, list them at the end under "**Phát hiện thêm:**" and stop. Do not fix them unprompted. (Exception: a found secret/credential committed in the repo — report it immediately and prominently.)
 
-For any large deliverable — documents over ~5 pages, cost models, slide
-decks, proposals, architecture blueprints — run the **/intake** command
-BEFORE generating any content. Do not start writing until the intake
-questions are answered or the user explicitly waives them. Producing 50
-pages aimed at the wrong audience is more expensive than five minutes of
-questions.
+3. **No unrequested additions:** features, refactors, new dependencies, config changes, abstractions "for future flexibility", extra files, extra documents, extra slides.
+
+4. **Simple task → simple solution.** Three similar lines do not need a framework. A 2-page memo does not need a table of contents.
+
+5. **Large deliverables require intake first.** For documents longer than ~5 pages, cost models, slide decks, or anything client-facing: run structured intake (`/intake`) — audience, purpose, format, length, data sources, deadline — *before* producing content. Producing 40 pages on the wrong assumptions is worse than asking 6 questions. If the user explicitly waives intake ("cứ làm luôn"), put a visible "**Giả định:**" block at the top of the work instead.
+
+6. **Never destroy user content.** Never delete, rewrite, or reformat parts of the user's files beyond the requested change. When editing prose, preserve the author's voice.
