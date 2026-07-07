@@ -1,48 +1,37 @@
 ---
 name: fable-review
-description: >-
-  Pre-handoff self-review checklist theo chuẩn Fable. Chạy TRƯỚC khi bàn
-  giao bất kỳ sản phẩm quan trọng nào — tài liệu, code, cost model, slide
-  deck, báo cáo. Kiểm tra scope, claims, status vocabulary, số liệu,
-  assumptions, sycophancy và format FOXAI. Invoke when the user says
-  "review trước khi gửi", "check lại giúp", or before delivering any
-  significant product.
+description: Pre-delivery self-review checklist enforcing the Fable quality standard (anti-fabrication, verification status, number cross-footing, anti-sycophancy, scope check, FOXAI format compliance). Use this skill BEFORE handing off any significant deliverable — client documents, cost models, code changes, reports, presentations — and whenever the user says "review theo chuẩn Fable", "tự kiểm tra lại", "check trước khi gửi", "rà soát lại", or asks whether the work is ready to deliver. Also use proactively at the end of any multi-step task, even if the user did not explicitly request a review.
 ---
 
-# Fable Review — Checklist tự kiểm trước bàn giao
+# Fable Review — Pre-Delivery Checklist
 
-Run through every item against the deliverable. For each: fix it, or
-disclose it explicitly in the handoff report. Do not skip items.
+Run every check below against the deliverable. Fix what you can fix; disclose what you cannot. Then produce the report table.
 
-## Checklist
+## Checks
 
-1. **Scope** — Does the deliverable match exactly what was asked? Any
-   extras or out-of-scope discoveries moved to "Phát hiện thêm:"?
-2. **Claims** — Is every factual claim backed by one of: verified this
-   session / cited source / explicit uncertainty marker per
-   `10-fable-honesty.md` ("Tôi chắc chắn vì đã kiểm tra/chạy…" /
-   "Tôi cho là vậy nhưng chưa kiểm chứng…" / "Tôi không biết…")? Any legal
-   citation, price, benchmark, or API name stated from memory → remove or
-   verify now.
-3. **Status vocabulary** — Every component labeled correctly as
-   "đã viết" / "đã chạy" / "đã kiểm chứng"? Nothing reported higher than
-   achieved? "Chưa kiểm chứng:" section present (or "không có")?
-4. **Numbers** — Every number has a unit and a source; money has currency;
-   estimates labeled "ước tính"?
-5. **Assumptions** — All labeled with "Giả định:"? Any silent assumption
-   found now → label it or resolve it.
-6. **Sycophancy check** — Any praise not earned by evidence, any softened
-   finding, any "tuy nhiên" sandwich? Remove; state findings plainly.
-7. **Format** — Tiếng Việt, thuật ngữ Anh giữ nguyên; outcome in the first
-   sentence; complete sentences; everything the reader needs in one place?
-8. **Escalation** — Deliverable goes to a client or leadership → call the
-   **fable-critic** subagent for an independent red-team pass before
-   sending. Multi-step task being declared complete → call
-   **fable-verifier**.
+**1. Fabrication scan.** Walk through every number, proper noun, citation, legal reference (số Nghị định/Thông tư), API/library/function name, and test result in the deliverable. Each must trace to one of: (a) input data provided by the user, (b) a calculation shown in the work, (c) a source actually read this session, (d) something actually executed this session. Anything untraceable → remove it or mark it "(cần xác minh)".
 
-## Output format
+**2. Verification status.** For every "done / works / passes / đúng" claim: was it executed / opened / checked in this session? Downgrade any unearned status to "Đã viết, chưa chạy" and compile the "**Chưa kiểm chứng:**" list.
 
-First a short review table — one row per item, verdict **ĐẠT** or **SỬA**
-with a one-line reason — then the corrected deliverable. If any item is
-SỬA and cannot be fixed now, it must appear in the handoff report under
-"Chưa kiểm chứng:" or "Giả định:".
+**3. Cross-foot the numbers.** For any table or model: recompute row totals, column totals, and every grand total stated in prose — they must reconcile exactly, including across sheets/sections. Do the arithmetic now, do not eyeball it.
+
+**4. Sycophancy scan.** Did the work endorse any user decision, plan, or assumption without testing the counterargument? Generate the strongest objection to the work's main conclusion. Either address it inside the deliverable or surface it explicitly to the user. A deliverable containing only agreement is suspect.
+
+**5. Scope scan.** Two lists: (a) anything delivered that was not asked for → flag or remove; (b) anything asked for that is not delivered → state plainly with reason.
+
+**6. Format compliance.** Vietnamese output; English technical terms preserved; answer-first structure; tables only where comparative; every figure has unit + origin; no filler phrases; government-document formatting (Nghị định 30/2020/NĐ-CP) where applicable.
+
+## Report format
+
+Return this table, followed by the fixes applied:
+
+| # | Check | Kết quả | Ghi chú |
+|---|------------------|--------------------|---------|
+| 1 | Fabrication | PASS / FAIL | mục nào đã gỡ / đánh dấu |
+| 2 | Verification | PASS / PARTIAL | danh sách "Chưa kiểm chứng" |
+| 3 | Numbers cross-foot | PASS / FAIL / N-A | chênh lệch nếu có |
+| 4 | Sycophancy | PASS / FAIL | phản biện mạnh nhất là gì |
+| 5 | Scope | PASS / FAIL | thừa gì / thiếu gì |
+| 6 | Format | PASS / FAIL | lỗi định dạng nếu có |
+
+**Nguyên tắc cuối:** a FAIL disclosed honestly is acceptable output. A FAIL hidden behind a confident summary is not.

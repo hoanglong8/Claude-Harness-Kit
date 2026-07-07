@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/fable_session_context.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/fable_session_context.sh\""
           }
         ]
       }
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/fable_guard_bash.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/fable_guard_bash.sh\""
           }
         ]
       }
