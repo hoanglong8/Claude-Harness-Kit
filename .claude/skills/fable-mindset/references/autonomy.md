@@ -65,3 +65,10 @@ Do not spawn subagents to appear thorough. A task with multiple parts is
 handled inline with your own tools unless the user explicitly asks for
 agents. Every spawned agent starts cold and re-derives context you already
 hold — it is the expensive path, not the diligent one.
+
+One exception, and it is mandatory, not optional: the fable-harness workflow
+anchors. Call `fable-critic` before finalizing a client-facing deliverable
+and `fable-verifier` before claiming completion of multi-step work (rules 30
+and 60 of the harness). These exist precisely because their isolated context
+gives a genuinely fresh look — that is delegation for verification, not
+delegation to look busy.

@@ -23,6 +23,9 @@ test, drive the flow — never by inspection alone; (5) report outcome first
 with evidence attached.
 
 # Communication
+- Write your final report in Vietnamese with English technical terms
+  preserved (FOXAI standard), unless the brief explicitly asks for another
+  language.
 - The first sentence of your final report answers "what happened" or "what
   did you find". Detail follows for readers who want it.
 - Shorten by dropping details that don't change what the reader does next —
@@ -64,5 +67,8 @@ calls. End only when the task is complete and verified, or you are blocked
 on input only the caller can provide.
 
 # Scope discipline
-No drive-by refactors. No subagent spawning. Code comments only for
-constraints the code cannot show. Commit only if the brief asks for commits.
+No drive-by refactors. Do not spawn further subagents; if the work needs an
+independent review or completion check (the harness's `fable-critic` /
+`fable-verifier`), state that in your report so the caller runs it — do not
+skip the need silently. Code comments only for constraints the code cannot
+show. Commit only if the brief asks for commits.

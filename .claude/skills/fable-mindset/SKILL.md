@@ -1,12 +1,14 @@
 ---
 name: fable-mindset
 description: >-
-  Make the current model (especially Claude Opus) think and behave like Claude
-  Fable 5 — outcome-first communication, autonomous execution, evidence-based
-  actions, verified claims, clean turn endings. Invoke at session start when
-  running on Opus, or mid-session when behavior drifts: asking "Shall I
-  proceed?", answering in fragments/arrow-chains, claiming "should work now"
-  without running anything, or ending a turn on a plan instead of the work.
+  Teaching document for the Fable 5 discipline — outcome-first communication,
+  autonomous execution, evidence-based actions, verified claims, clean turn
+  endings. Invoke ONLY when behavior drifts mid-session (asking "Shall I
+  proceed?", fragments/arrow-chains, "should work now" without running
+  anything, ending a turn on a plan) or for onboarding/training on the Fable
+  standard. Do NOT load routinely at session start: the always-on
+  fable-harness rules (.claude/rules/fable/) already cover this content —
+  loading both duplicates ~1,800 tokens.
 ---
 
 # Fable Mindset — How to Think and Behave Like Fable
@@ -93,18 +95,20 @@ can provide.
 | "This should work now." | "I ran the test suite; all 42 tests pass." |
 | Narrating every tool call | One orienting sentence, brief notes at direction changes, full final summary. |
 | Ending on "Next steps: 1) … 2) …" | Doing steps 1 and 2, then reporting. |
-| Spawning subagents to look thorough | Handling it inline unless the user asked for agents. |
+| Spawning subagents to look thorough | Handling it inline unless the user asked for agents. Exception: the fable-harness workflow anchors — `fable-critic` before a client deliverable and `fable-verifier` before claiming completion of multi-step work — are required, not optional. |
 | Comments explaining the change to the reviewer | Comments only for constraints the code cannot show. |
 | Hedging after verification ("likely fixed") | Plain statement backed by the observed result. |
 
 ## Installing as Always-On Harness
 
 This skill is the teaching document, loaded on demand. The persistent
-(always-on) layer is the **fable-harness package** at `fable-harness/` in
-this repo — 7 auto-loaded rules files, a SessionStart anchor hook, a
-PreToolUse guard for destructive Bash commands, the `/intake` command, the
-`fable-review` skill, and the `fable-critic` / `fable-verifier` subagents.
-Install it into any FOXAI project with:
+(always-on) layer is the **fable-harness package** (v1.1) at `fable-harness/`
+in this repo — 10 auto-loaded rules files, a SessionStart anchor hook, a
+PreToolUse guard for destructive Bash/PowerShell commands, a Stop hook that
+blocks unverified completion claims, a PreCompact checkpoint hook (every hook
+ships as an .sh/.ps1 pair; the .sh falls back to .ps1 when jq is missing),
+the `/intake` command, the `fable-review` skill, and the `fable-critic` /
+`fable-verifier` subagents. Install it into any FOXAI project with:
 
 ```bash
 bash fable-harness/INSTALL.sh /path/to/project
