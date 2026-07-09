@@ -1,0 +1,4 @@
+# Hooks bash phải giữ LF — CRLF làm bash lỗi "\r: command not found" khi checkout trên Windows (autocrlf=true)
+*.sh text eol=lf
+# .ps1 giữ nguyên như đã commit (UTF-8 BOM, line ending nào PowerShell cũng đọc được)
+*.ps1 -text
