@@ -1,0 +1,114 @@
+name: Harness Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'docs/**'
+      - 'scripts/**'
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - '.github/workflows/harness-check.yml'
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  harness-validation:
+    name: Check Harness Consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if harness exists
+        id: harness_check
+        run: |
+          if [[ -f "AGENTS.md" && -d "docs" && -f "CLAUDE.md" ]]; then
+            echo "is_harness=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_harness=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run harness validation
+        if: steps.harness_check.outputs.is_harness == 'true'
+        run: |
+          if [[ -f "scripts/validate-harness.sh" ]]; then
+            bash scripts/validate-harness.sh
+            exit_code=$?
+            if [[ $exit_code -ne 0 ]]; then
+              echo "::error::Harness validation failed with exit code $exit_code"
+              exit 1
+            fi
+          else
+            echo "::warning::validate-harness.sh not found, skipping validation"
+            exit 0
+          fi
+
+      - name: Check git status
+        if: steps.harness_check.outputs.is_harness == 'true'
+        run: |
+          if git diff --quiet; then
+            echo "✅ Git status clean"
+          else
+            echo "::warning::Uncommitted changes detected"
+            git status --short
+          fi
+
+      - name: Validate story files (if present)
+        if: steps.harness_check.outputs.is_harness == 'true'
+        run: |
+          if [[ -d "docs/stories" ]]; then
+            story_count=$(find docs/stories -maxdepth 1 -type f -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
+            high_risk_count=$(find docs/stories -maxdepth 1 -type d -name "*-*" 2>/dev/null | wc -l)
+
+            if [[ $story_count -gt 0 ]] || [[ $high_risk_count -gt 0 ]]; then
+              echo "📊 Stories found:"
+              echo "   Regular stories: $story_count"
+              echo "   High-risk packets: $high_risk_count"
+            fi
+          fi
+
+      - name: Validate TEST_MATRIX.md
+        if: steps.harness_check.outputs.is_harness == 'true'
+        run: |
+          if [[ -f "docs/TEST_MATRIX.md" ]]; then
+            row_count=$(grep -c "^|" docs/TEST_MATRIX.md 2>/dev/null || echo 0)
+            if [[ $row_count -lt 3 ]]; then
+              echo "::warning::TEST_MATRIX.md has minimal content (only template)"
+            else
+              echo "✅ TEST_MATRIX.md has $((row_count - 2)) behavior rows"
+            fi
+          else
+            echo "::warning::TEST_MATRIX.md not found"
+          fi
+
+      - name: Report summary
+        if: always() && steps.harness_check.outputs.is_harness == 'true'
+        run: |
+          echo "## Harness Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Validation complete**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Checks performed:" >> $GITHUB_STEP_SUMMARY
+          echo "- Core documentation files" >> $GITHUB_STEP_SUMMARY
+          echo "- Templates structure" >> $GITHUB_STEP_SUMMARY
+          echo "- Folder structure & READMEs" >> $GITHUB_STEP_SUMMARY
+          echo "- Story file naming" >> $GITHUB_STEP_SUMMARY
+          echo "- TEST_MATRIX.md content" >> $GITHUB_STEP_SUMMARY
+          echo "- AGENTS.md & CLAUDE.md" >> $GITHUB_STEP_SUMMARY
+          echo "- Git status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For details, run: `bash scripts/validate-harness.sh`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Not a harness project
+        if: steps.harness_check.outputs.is_harness == 'false'
+        run: |
+          echo "ℹ️  Not a Claude-Harness-Kit project, skipping validation"

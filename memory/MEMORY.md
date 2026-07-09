@@ -1,0 +1,2 @@
+- [Phase 2 & 3 completion](phase2_phase3_status.md) — Phase 2 hoàn thành 3/3 tasks; Phase 3 hoàn thành CI/CD workflow
+- [Phase 4 stack guides](phase4_status.md) — Node.js/Express, Python/FastAPI, Go/Fiber guides hoàn thành
