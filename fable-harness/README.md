@@ -2,7 +2,7 @@
 
 Bộ harness đóng gói **chuẩn hành vi của Claude Fable 5** thành rules, skill, hooks và subagents cho Claude Code — để Opus, Sonnet (và các model Anthropic sau này) hành xử nhất quán theo cùng một chuẩn trong mọi project của FOXAI.
 
-**Phiên bản:** 1.0 · **Yêu cầu:** Claude Code ≥ 2.0.64 (thư mục `.claude/rules/` tự nạp), `jq`, bash.
+**Phiên bản:** 1.1 · **Yêu cầu:** Claude Code ≥ 2.0.64 (thư mục `.claude/rules/` tự nạp), bash + `jq` HOẶC PowerShell (hooks .sh tự fallback sang bản .ps1 khi thiếu jq; riêng INSTALL.sh cần jq để merge settings — máy Windows không có jq thì merge thủ công theo mục 3).
 
 ---
 
@@ -55,7 +55,7 @@ fable-harness/
         └── fable_precompact_checkpoint.{sh,ps1} PreCompact: snapshot transcript vào .claude/checkpoints/ (giữ 5 bản)
 ```
 
-Ánh xạ vào khung **Harness Engineering 5 layer** (harness-init): rules + skill + command → Layer 1 (Memory); hai hooks → Layer 4 (Hooks); phần merge settings.json → Layer 3+4. Gói này **bổ sung**, không thay thế, những gì harness-init đã dựng — mọi file đều có prefix `fable` nên không đụng độ tên.
+Ánh xạ vào khung **Harness Engineering 5 layer** (harness-init): rules + skill + command → Layer 1 (Memory); bốn hooks (SessionStart, PreToolUse guard, Stop verify, PreCompact checkpoint) → Layer 4 (Hooks); phần merge settings.json → Layer 3+4. Gói này **bổ sung**, không thay thế, những gì harness-init đã dựng — mọi file đều có prefix `fable` nên không đụng độ tên.
 
 Cơ chế nạp của từng thành phần:
 
