@@ -49,12 +49,14 @@ Validate your project structure against Harness rules:
 
 ## Fable Harness — Behavior Pack for Opus/Sonnet
 
-📦 **[fable-harness/](fable-harness/)** — packages Claude Fable 5's behavioral
-standard (anti-sycophancy, anti-fabrication, verify-before-done, scope
-discipline, Vietnamese-first FOXAI output format) as auto-loaded rules, a
-destructive-command guard hook, an `/intake` command, a `fable-review` skill,
-and independent `fable-critic`/`fable-verifier` subagents. Install into any
-FOXAI project:
+📦 **[fable-harness/](fable-harness/)** (v1.1) — packages Claude Fable 5's
+behavioral standard (anti-sycophancy, anti-fabrication, verify-before-done,
+scope discipline, autonomous execution, Vietnamese-first FOXAI output format)
+as 10 auto-loaded rules, a destructive-command guard (Bash & PowerShell), a
+Stop hook that blocks unverified completion claims, a PreCompact state
+checkpoint, an `/intake` command, a `fable-review` skill, and independent
+`fable-critic`/`fable-verifier` subagents. Every hook ships as an .sh/.ps1
+pair (works on Windows without jq). Install into any FOXAI project:
 
 ```bash
 bash fable-harness/INSTALL.sh /path/to/project

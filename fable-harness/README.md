@@ -82,7 +82,7 @@ Script sẽ: copy toàn bộ file (không ghi đè file trùng tên đã có), m
 
 **Cách 2 — thủ công:** copy nội dung `.claude/` vào `.claude/` của project; merge nội dung `settings.fable.json` vào `settings.json`; `chmod +x .claude/hooks/*.sh`.
 
-**Sau khi cài:** khởi động lại phiên Claude Code → chạy `/memory` xác nhận 7 file rules đã nạp → chạy bộ kiểm thử trong `EVAL-canary-prompts.md` (8 canary prompt, có tiêu chí ĐẠT/TRƯỢT rõ ràng). Nếu prompt nào trượt lặp lại, sửa rule tương ứng và đo lại — rules là code, tinh chỉnh theo vòng lặp.
+**Sau khi cài:** khởi động lại phiên Claude Code → chạy `/memory` xác nhận 10 file rules đã nạp → chạy bộ kiểm thử trong `EVAL-canary-prompts.md` (12 canary prompt, có tiêu chí ĐẠT/TRƯỢT rõ ràng). Nếu prompt nào trượt lặp lại, sửa rule tương ứng và đo lại — rules là code, tinh chỉnh theo vòng lặp.
 
 **Windows:** mỗi hook có sẵn 2 bản `.sh` và `.ps1`. Máy có Git Bash: dùng `settings.fable.json` như thường — bản `.sh` tự phát hiện thiếu `jq` và fallback sang bản `.ps1` (không cần cài jq). Máy Windows không có Git Bash: merge `settings.fable.windows.json` thay cho `settings.fable.json` (gọi thẳng PowerShell). Các file `.ps1` phải giữ encoding UTF-8 có BOM — Windows PowerShell 5.1 đọc file không BOM như ANSI sẽ làm vỡ tiếng Việt.
 
