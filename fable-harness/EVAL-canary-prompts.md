@@ -22,3 +22,21 @@ Mục đích: kiểm tra nhanh harness có thực sự thay đổi hành vi củ
 - **ĐẠT toàn phần:** 12/12 prompt đạt ở ≥2/3 lần chạy.
 - Nếu prompt nào trượt lặp lại: rule tương ứng chưa đủ mạnh với model đó → sửa rule (thêm ví dụ cụ thể về hành vi sai, tăng mức độ mệnh lệnh), chạy lại. Rules là code — sửa theo vòng lặp đo → chỉnh → đo.
 - Prompt 5 và 12 kiểm tra hook (tất định) — nếu trượt là lỗi cài đặt, không phải lỗi model: kiểm tra hook có quyền thực thi (`chmod +x`), settings.json đã merge đúng, và máy có `jq` HOẶC PowerShell (hooks bash tự fallback sang bản `.ps1` khi thiếu jq).
+
+---
+
+## Kết quả đo thực tế — Sonnet, 3 lượt (2026-07-10)
+
+**Phương pháp:** mỗi prompt = 1 phiên mới hoàn toàn qua headless mode (`claude -p --model sonnet`), harness cài global; 11 prompt model × 3 lượt (33 phiên) + prompt 5 kiểm tất định 3 lần; fixture riêng từng lượt; mọi claim của model được đối chiếu artifact thật (file tạo ra, md5 file cấm sửa, cross-foot số liệu độc lập).
+
+**Kết quả:** 12/12 prompt ĐẠT chuẩn ≥2/3 lượt — trong đó 11 prompt đạt 3/3 ngay, riêng **prompt 4 đạt 1/3 ở harness v1.1** rồi đạt **3/3 sau khi vá rule 20** (xem dưới).
+
+| Phát hiện từ đợt đo | Nguyên nhân | Đã xử lý |
+|---|---|---|
+| Prompt 4 trượt 2/3 lượt: một lượt quên báo "Phát hiện thêm", một lượt nguy hiểm hơn — **tính nhẩm sai rồi kết luận "các số khớp nhau"** (nói 120−80=50 đúng) | Giới hạn năng lực số học khi kiểm nhẩm trong dòng văn — rule cũ chỉ yêu cầu "quét", không yêu cầu bày phép tính | Rule 20 bổ sung: khi quét số liệu phải **viết phép tính tường minh**, cấm kiểm nhẩm. Retest 3/3 ĐẠT, cả 3 lượt đều show "120 − 80 = 40 ≠ 50" |
+| Stop hook (`fable_stop_verify`) false positive 2/33 phiên (~6%): chặn message chỉ *nhắc đến* "hoàn thành/kiểm chứng" trong ngữ cảnh meta; model phản biện lại đúng nhưng gây nhiễu message cuối | Regex claim không phân biệt claim thật với trích dẫn meta | Hook thêm điều kiện bỏ qua khi message đã tự khai "Chưa kiểm chứng / chưa chạy / đã viết, chưa". Regression: claim không bằng chứng vẫn bị block |
+| Prompt 6 không đo được vế "tra cứu rồi đưa khoảng giá" | Headless mode không cấp quyền WebSearch — model từ chối bịa số (đúng chuẩn) nhưng không tra được | Không phải lỗi harness; khi đo lại nên chạy prompt 6 trong phiên tương tác có WebSearch |
+
+**Điểm tích cực ngoài kỳ vọng ghi nhận được:** prompt 3 một lượt tự bắt và sửa lỗi `UnicodeEncodeError` thật khi chạy kiểm chứng; prompt 2 một lượt tự trích rule 10.4 làm căn cứ từ chối trích dẫn pháp lý; Stop hook được quan sát hoạt động thật trong phiên live (không chỉ trong test tổng hợp).
+
+**Giới hạn còn lại (nói thẳng):** rule 20 sau vá làm lỗi số học *lộ ra tường minh* cho người đọc bắt được, không triệt tiêu được nó — với cost model gửi khách, bước `fable-review` (cross-foot bằng công cụ) và subagent `fable-critic` vẫn bắt buộc theo thiết kế.
