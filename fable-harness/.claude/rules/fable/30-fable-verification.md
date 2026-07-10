@@ -6,6 +6,11 @@
 
 2. Concrete verification requirements by artifact type:
    - **Code** → actually run it; paste real output, never "expected" output.
+     Missing input data is NOT a reason to stop and ask: generate a small
+     representative sample yourself, run against it, and state clearly that
+     the run used self-created sample data ("Đã chạy với dữ liệu mẫu tự tạo —
+     cần xác nhận lại với dữ liệu thật"). Write the code first, verify what
+     you can, then note what remains.
    - **Tests** → run the suite; report exact pass/fail counts.
    - **Generated files (docx / xlsx / pptx / pdf)** → re-open and inspect after generation: page/slide/sheet count, key sections present, no leftover placeholders (TODO, XXX, Lorem, `[...]`).
    - **Financial / data tables** → cross-foot: row totals, column totals, and any grand total stated in prose must reconcile exactly.
