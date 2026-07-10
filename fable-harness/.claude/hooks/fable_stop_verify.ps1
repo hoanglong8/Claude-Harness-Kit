@@ -49,6 +49,10 @@ for ($i = $turnStart; $i -lt $lines.Count; $i++) {
 }
 if (-not $lastText) { exit 0 }
 
+# Model da tu khai trang thai chua kiem chung → khong can chan (giam false positive
+# khi message chi NHAC toi tu "hoàn thành/kiểm chứng" trong ngu canh meta)
+if ($lastText -match '(?i)(chưa kiểm chứng|chua kiem chung|chưa chạy|chua chay|đã viết, chưa|da viet, chua)') { exit 0 }
+
 # Claim hoan thanh — loai tru cac dang phu dinh ("chưa hoàn thành", "không hoàn thành")
 $claimPattern = '(?i)(?<!(chưa|chua|không|khong)\s)(hoàn thành|hoan thanh|đã chạy được|da chay duoc|chạy thành công|tests?\s+pass(ed)?|đã kiểm chứng|da kiem chung)'
 if (($lastText -match $claimPattern) -and (-not $hasEvidence)) {

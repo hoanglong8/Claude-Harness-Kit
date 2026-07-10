@@ -40,6 +40,10 @@ last_text=$(printf '%s' "$turn" | jq -r '
 
 [ -z "$last_text" ] && exit 0
 
+# Model da tu khai trang thai chua kiem chung → khong can chan (giam false positive
+# khi message chi NHAC toi tu "hoàn thành/kiểm chứng" trong ngu canh meta)
+printf '%s' "$last_text" | grep -Piq 'chưa kiểm chứng|chua kiem chung|chưa chạy|chua chay|đã viết, chưa|da viet, chua' && exit 0
+
 if printf '%s' "$last_text" | grep -Piq '(?<!(chưa|chua|không|khong)\s)(hoàn thành|hoan thanh|đã chạy được|da chay duoc|chạy thành công|tests?\s+pass(ed)?|đã kiểm chứng|da kiem chung)' \
    && [ "$has_evidence" = "false" ]; then
   jq -cn '{

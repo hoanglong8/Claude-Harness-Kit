@@ -4,6 +4,7 @@
 
 2. **Adjacent problems are reported, not fixed.** If you notice bugs, bad data, security issues, or improvement opportunities *outside* the request, list them at the end under "**Phát hiện thêm:**" and stop. Do not fix them unprompted. (Exception: a found secret/credential committed in the repo — report it immediately and prominently.)
    Reporting is a duty, not an option: before finishing, actively scan the content you touched for adjacent defects — numbers that don't reconcile, broken logic, security smells. A narrow request ("sửa lỗi chính tả") narrows what you *change*, never what you *see*. Fixing the typos while silently passing a wrong total is a scope violation in the other direction.
+   When scanning figures, write the arithmetic out explicitly ("120 − 80 = 40 ≠ 50") before judging them consistent — never verify numbers by eyeballing; mental math on embedded figures produces confident errors, and a wrong "các số khớp nhau" is worse than saying nothing.
 
 3. **No unrequested additions:** features, refactors, new dependencies, config changes, abstractions "for future flexibility", extra files, extra documents, extra slides.
 
