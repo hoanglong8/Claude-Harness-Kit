@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-05-19 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-07-11 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -50,7 +50,8 @@
 - `/memory` — Duyệt & quản lý auto-memory
 - `/compact "focus on [X]"` — Nén context khi ~70%
 - `/review`, `/security-review` — Review PR/branch
-- `/model <opus|sonnet|haiku>` — Đổi model
+- `/intake` — Khai thác yêu cầu trước deliverable lớn (bắt buộc theo rule 20)
+- `/model <opus|sonnet|haiku>` — Đổi model (mặc định: Fable 5)
 - `/update-config`, `/loop`, `/schedule` — Config & automation
 
 **Auto-Memory Commands:**
@@ -98,8 +99,8 @@ KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE · WOR
 
 **Hooks:**
 - Hooks > CLAUDE.md cho rule phải thực thi 100%
-- Hook quan trọng: **PreCompact** — snapshot state trước nén context
-- Config tại: `.claude/settings.json` (pattern: Event → Matcher → Command)
+- Đang chạy global (fable-harness): SessionStart (neo chuẩn), PreToolUse guard (chặn lệnh phá hủy Bash/PowerShell), Stop verify (chặn claim "hoàn thành" không bằng chứng), PreCompact checkpoint (snapshot vào `.claude/checkpoints/`)
+- Config tại: `.claude/settings.json` (pattern: Event → Matcher → Command); hooks .sh tự fallback sang .ps1 khi thiếu jq
 
 ---
 
@@ -174,3 +175,29 @@ Full framework: `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md`
 - `~/.claude/CLAUDE_QUICK_COMMANDS.md` — Quick reference
 - `./CLAUDE.md` — Project-level rules (nếu có)
 - `./CLAUDE.local.md` — Personal config (không commit)
+
+---
+
+## 10. CHUẨN HÀNH VI FABLE (fable-harness — đã cài global, EVAL 12/12)
+
+10 rules trong `~/.claude/rules/fable/` TỰ ĐỘNG NẠP mọi phiên — không cần nhắc lại ở đây. Điểm neo bắt buộc theo loại việc:
+
+| Tình huống | Hành động |
+|---|---|
+| Deliverable lớn (>5 trang, cost model, slide deck) | Chạy `/intake` trước khi viết |
+| Trước khi bàn giao sản phẩm quan trọng | Chạy skill `fable-review` |
+| Deliverable gửi khách / trình lãnh đạo | Gọi subagent `fable-critic` phản biện |
+| Trước khi báo "hoàn thành" task nhiều bước | Gọi subagent `fable-verifier` kiểm chứng |
+| Kiểm số liệu trong văn bản | Viết phép tính tường minh, cấm kiểm nhẩm (rule 20) |
+
+Nguồn chuẩn: `C:\Users\Admin\fable-harness\` (canonical) · Đo lường: `fable-harness/EVAL-canary-prompts.md` · Skill dạy (on-demand, không nạp thường trực): `/fable-mindset`
+
+---
+
+## 11. GIT TRÊN MÁY NÀY — QUY TẮC AN TOÀN BẮT BUỘC
+
+- **Repo root là CẢ home directory `C:\Users\Admin`**, remote = github.com/hoanglong8/Claude-Harness-Kit (public). Hệ quả:
+  - **TUYỆT ĐỐI KHÔNG `git add .` / `git add -A` từ home** — sẽ kéo file cá nhân (Downloads, Documents, .ssh...) lên repo public. Luôn `git add` đích danh từng path.
+  - Sửa fable-harness: sửa tại `fable-harness/` (canonical, tracked) → đồng bộ sang `~/.claude/` (bản chạy) và `~\.claude\Claude-Harness-Kit\` (working copy, đã gitignore — không commit lại)
+  - File `.ps1` của harness phải giữ UTF-8 BOM (PowerShell 5.1 đọc không BOM sẽ vỡ tiếng Việt)
+- Secrets: không set `ANTHROPIC_API_KEY` trong env (đè lên login claude.ai); key 9router nằm trong Windows Credential Manager (resource `9router`, user `api`) — không tạo lại file key plaintext

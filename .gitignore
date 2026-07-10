@@ -28,3 +28,4 @@ venv/
 # Personal local overrides & working copy of harness kit (never commit)
 .claude/settings.local.json
 .claude/Claude-Harness-Kit/
+CLAUDE.local.md
