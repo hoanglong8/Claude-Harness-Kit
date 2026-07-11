@@ -54,23 +54,16 @@
 - `/model <opus|sonnet|haiku>` — Đổi model (mặc định: Fable 5)
 - `/update-config`, `/loop`, `/schedule` — Config & automation
 
-**Auto-Memory Commands:**
-```bash
-# Xem stats của project hiện tại
-bash ~/.claude/bin/auto-memory-system.sh stats
-
-# Khởi tạo memory cho project mới
-bash ~/.claude/bin/auto-memory-system.sh init
-
-# Liệt kê tất cả projects có memory
-bash ~/.claude/bin/auto-memory-system.sh list-projects
-```
+**Auto-Memory:** lệnh `stats / init / list-projects` — chi tiết đã tách ra `.claude/rules/auto-memory.md` (tự nạp)
 
 ---
 
-## 4. KIẾN TRÚC CLAUDE CODE
+## 4. NỘI DUNG ĐÃ TÁCH RA `~/.claude/rules/` (tự nạp mỗi phiên — không dùng `@import` vì sẽ nạp trùng)
 
-Đã tách ra `.claude/rules/claude-code-architecture.md` — tự nạp mỗi phiên qua `~/.claude/rules/` (không dùng `@import` để tránh nạp trùng 2 lần).
+- `claude-code-architecture.md` — kiến trúc Claude Code (QueryEngine, tools, compaction...)
+- `bmad-survey.md` — BMAD Quick Survey 30s; bản đầy đủ: `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md`; deliverable lớn vẫn bắt buộc `/intake`
+- `auto-memory.md` — lệnh auto-memory system
+- `fable/` (10 file) — chuẩn hành vi Fable (xem section 9)
 
 ---
 
@@ -97,19 +90,7 @@ bash ~/.claude/bin/auto-memory-system.sh list-projects
 
 ## 6. BA & DOCUMENTATION FRAMEWORK
 
-**Auto-Reminder khi nói keywords:**
-- "viết tài liệu" / "BA" / "framework" / "glossary" / "specification"
-- Tôi auto-suggest 4 câu hỏi + template phù hợp
-
-**Templates:**
-- Business Vision / Business Model Canvas
-- Ubiquitous Language Glossary
-- Event Storming Results
-- Implementation Roadmap
-- Bounded Context Canvas
-- Process Flow / Use Case
-
-**Guide:** `~/.claude/guides/BA-DOCUMENT-FRAMEWORK.md`
+Keywords "viết tài liệu / BA / framework / glossary / specification" → auto-suggest 4 câu hỏi + template phù hợp (Business Vision, BMC, Glossary, Event Storming, Roadmap, Bounded Context Canvas, Process Flow / Use Case). Chi tiết: `~/.claude/guides/BA-DOCUMENT-FRAMEWORK.md`
 
 ---
 
@@ -120,23 +101,11 @@ bash ~/.claude/bin/auto-memory-system.sh list-projects
 - **Gmail, Google Calendar** — OAuth authenticate lần đầu
 - **Notion, Slack** — đọc/viết pages, messages
 
-**Recommended Skills:**
-- `/update-config` — settings.json, hooks, permissions
-- `/loop <interval> <cmd>` — chạy lặp lại (monitoring)
-- `/schedule` — scheduled remote agents
-- `/simplify` — review code quality
-- `/security-review` — kiểm tra bảo mật
-- `/claude-api` — build/debug Claude API apps
+**Recommended Skills:** `/update-config` (settings/hooks/permissions) · `/loop` · `/schedule` · `/simplify` · `/security-review` · `/claude-api`
 
 ---
 
-## 8. BMAD SURVEY FRAMEWORK
-
-Đã tách ra `.claude/rules/bmad-survey.md` (checklist 30s, tự nạp mỗi phiên) — bản đầy đủ: `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md`. Với deliverable lớn: `/intake` vẫn là bước bắt buộc, BMAD chỉ bổ trợ.
-
----
-
-## 9. DANH SÁCH PROJECTS & FILES THAM KHẢO
+## 8. DANH SÁCH PROJECTS & FILES THAM KHẢO
 
 **Projects (14 items):**
 - Dự án Triển khai VN: Sở KHCN HN, Lào Cai, VPCP, Công An, Bệnh viện A, Agribank, Việt Hưng, Văn Định
@@ -152,7 +121,7 @@ bash ~/.claude/bin/auto-memory-system.sh list-projects
 
 ---
 
-## 10. CHUẨN HÀNH VI FABLE (fable-harness — đã cài global, EVAL 12/12)
+## 9. CHUẨN HÀNH VI FABLE (fable-harness — đã cài global, EVAL 12/12)
 
 10 rules trong `~/.claude/rules/fable/` TỰ ĐỘNG NẠP mọi phiên — không cần nhắc lại ở đây. Điểm neo bắt buộc theo loại việc:
 
@@ -168,7 +137,7 @@ Nguồn chuẩn: `C:\Users\Admin\fable-harness\` (canonical) · Đo lường: `f
 
 ---
 
-## 11. GIT TRÊN MÁY NÀY — QUY TẮC AN TOÀN BẮT BUỘC
+## 10. GIT TRÊN MÁY NÀY — QUY TẮC AN TOÀN BẮT BUỘC
 
 - **Repo root là CẢ home directory `C:\Users\Admin`**, remote = github.com/hoanglong8/Claude-Harness-Kit (public). Hệ quả:
   - **TUYỆT ĐỐI KHÔNG `git add .` / `git add -A` từ home** — sẽ kéo file cá nhân (Downloads, Documents, .ssh...) lên repo public. Luôn `git add` đích danh từng path.

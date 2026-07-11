@@ -29,9 +29,7 @@ Project này tuân theo **fable-harness** — cài bằng `bash fable-harness/IN
 
 ## 🚫 Constraints
 
-- **Never** commit `.credentials.json`, `.env`, or API keys
-- **Never** force push to main or develop branches
-- **Never** delete data without backup (ask first)
+- Secrets / force push / xóa dữ liệu: fable-harness rule 50 + guard hook đã cưỡng chế — không cần nhắc lại ở đây
 - **Production database:** Always backup before running migrations
 - **Tests:** Run full test suite before committing (hook will enforce)
 
@@ -47,20 +45,10 @@ Project này tuân theo **fable-harness** — cài bằng `bash fable-harness/IN
 
 ---
 
-## 📞 Escalation
+## 📞 Escalation & Links
 
-- **Questions about requirements?** Ask in #[project-channel] on Slack
-- **Blocker on dependencies?** Tag @[lead-name] in GitHub issue
-- **Production incident?** Trigger `/incident-response` skill
-
----
-
-## 🔗 Quick Links
-
-- **Obsidian Vault:** [URL from MEMORY.md]
-- **Monitoring:** [Grafana/DataDog link]
-- **Team Docs:** [Confluence/Notion link]
-- **Support:** [Project email or Slack channel]
+- Requirements → #[project-channel] Slack · Blocker → tag @[lead-name] GitHub · Incident → `/incident-response`
+- **Links:** Vault [URL] · Monitoring [Grafana/DataDog] · Docs [Confluence/Notion] · Support [email/Slack]
 
 ---
 
