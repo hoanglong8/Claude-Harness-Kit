@@ -5,7 +5,9 @@
 > **Phiên bản: 1.1** · Ngày: 11/07/2026 · Thay thế bản 1.0 (11/07/2026)
 > Nguồn: repository `hoanglong8/Claude-Harness-Kit` (thư mục `fable-harness/`)
 > Người biên soạn: Claude Code — duyệt: Nguyễn Hoàng Long
-> File này là **nguồn chuẩn**; bản `.docx` cùng tên được sinh tự động từ file này bằng pandoc — sửa nội dung thì sửa ở đây rồi sinh lại.
+> File này là **nguồn chuẩn**; bản `.docx` cùng tên được sinh tự động từ file này — sửa nội dung thì sửa ở đây rồi chạy:
+> `pandoc SETUP-GUIDE-FABLE-HARNESS.md -f gfm -t docx --toc --reference-doc=docs/templates/foxai-reference.docx -o .claude/SETUP-GUIDE-FABLE-HARNESS.docx`
+> Reference branding FOXAI (`docs/templates/foxai-reference.docx`): logo + header/footer + heading màu #0C5488 (trích từ logo chính thức trên fox.ai.vn) — dùng chung cho mọi tài liệu DOCX sau này của repo.
 
 **Thay đổi chính so với bản 1.0:** 7 → **10 rules** (thêm 45-writing, 70-autonomy, 75-context-economy); 2 → **4 hooks**, mỗi hook có cặp `.sh`/`.ps1` (thêm Stop verify + PreCompact checkpoint); hết cảnh "thiếu jq = guard tắt" (tự fallback sang PowerShell); Windows được hỗ trợ đầy đủ; EVAL 8 → **12 canary** kèm kết quả đo thật trên Sonnet và Opus.
 
