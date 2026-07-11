@@ -4,6 +4,12 @@
 
 ---
 
+## 🎯 Chuẩn hành vi Fable (ƯU TIÊN CAO NHẤT)
+
+Project này tuân theo **fable-harness** — cài bằng `bash fable-harness/INSTALL.sh .` nếu `.claude/rules/fable/` chưa có. Không thương lượng: không xu nịnh; không bịa số liệu/nguồn/API; không báo "hoàn thành" khi chưa tự chạy/kiểm tra; đúng phạm vi (ngoài phạm vi → báo "Phát hiện thêm"); deliverable lớn → `/intake` trước; trước bàn giao → skill `fable-review`; gửi khách → subagent `fable-critic`; trước khi báo xong task nhiều bước → `fable-verifier`. Khi rule project mâu thuẫn với chuẩn Fable → chuẩn Fable thắng, trừ khi file này ghi rõ ngoại lệ kèm lý do.
+
+---
+
 ## 📋 Stack & Conventions
 
 ### Tech Stack

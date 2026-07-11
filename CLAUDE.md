@@ -68,18 +68,9 @@ bash ~/.claude/bin/auto-memory-system.sh list-projects
 
 ---
 
-## 4. KIẾN TRÚC CLAUDE CODE (verified 31/3/2026)
+## 4. KIẾN TRÚC CLAUDE CODE
 
-| Thành phần | Chi tiết |
-|-----------|---------|
-| **QueryEngine** | ~46K LOC — xử lý API calls, streaming, caching |
-| **Tool System** | 60+ tools; ~18 ẩn — chỉ xuất hiện khi gọi đúng tên |
-| **Multi-agent** | COORDINATOR_MODE: 1 orchestrator điều phối N Claude workers |
-| **Output retry** | Auto-inject "Resume directly" — max 3 lần, sau đó dừng |
-| **Compaction** | Kích hoạt ~83.5% context; giữ code/task, mất convention |
-
-**Tính năng chưa release (feature-flagged):**
-KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE · WORKFLOW_SCRIPTS · PROACTIVE · SSH_REMOTE · MONITOR_TOOL · AGENT_TRIGGERS
+Đã tách ra `.claude/rules/claude-code-architecture.md` — tự nạp mỗi phiên qua `~/.claude/rules/` (không dùng `@import` để tránh nạp trùng 2 lần).
 
 ---
 
@@ -141,24 +132,7 @@ KAIROS · ULTRAPLAN · VOICE_MODE · WEB_BROWSER_TOOL · COORDINATOR_MODE · WOR
 
 ## 8. BMAD SURVEY FRAMEWORK
 
-**BMAD = Breakthrough Method of Agile AI-driven Development**
-
-Mỗi request mới: dùng **BMAD Survey Checklist** để khảo sát context trước execute:
-
-**Quick Survey (30s):**
-```
-1. Type? (Feature / Bug / Refactor / Architecture / Analysis)
-2. Complexity? (Simple / Complex / Enterprise)
-3. Phase? (Analysis / Planning / Solutioning / Implementation / Retrospective)
-4. Requirements rõ? (FRs/NFRs/Scope/Timeline định nghĩa)
-5. Stakeholders/Context? (Biết ai approve, ai implement, tech stack)
-```
-
-**Nếu ≥1 không rõ:**
-→ Suggest Analysis workflow (Brainstorm / Research / Brief / PRFAQ)
-→ Hoặc trigger Planning phase trước Implementation
-
-Full framework: `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md`
+Đã tách ra `.claude/rules/bmad-survey.md` (checklist 30s, tự nạp mỗi phiên) — bản đầy đủ: `~/.claude/guides/BMAD-SURVEY-FRAMEWORK.md`. Với deliverable lớn: `/intake` vẫn là bước bắt buộc, BMAD chỉ bổ trợ.
 
 ---
 
