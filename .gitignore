@@ -29,3 +29,7 @@ venv/
 .claude/settings.local.json
 .claude/Claude-Harness-Kit/
 CLAUDE.local.md
+
+# Fonts cua foxai-book-writer: script tu tai lan dau, khong commit binary
+.claude/skills/foxai-book-writer/assets/fonts/
+.claude/skills/foxai-book-writer/scripts/__pycache__/
