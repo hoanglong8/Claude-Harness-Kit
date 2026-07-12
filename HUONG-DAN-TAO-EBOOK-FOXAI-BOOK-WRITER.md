@@ -2,7 +2,7 @@
 
 > Sinh sách phi hư cấu tiếng Việt định dạng **DOCX + PDF** chất lượng xuất bản, theo 2 theme premium
 >
-> **Phiên bản: 1.0** · Ngày: 12/07/2026 · Skill: foxai-book-writer **v4.1**
+> **Phiên bản: 1.1** · Ngày: 12/07/2026 · Skill: foxai-book-writer **v5** (quy trình 5 giai đoạn + multi-agent)
 > Vị trí skill: `~/.claude/skills/foxai-book-writer/` (đã chuyển về đúng thư mục skills để Claude Code tự nhận diện)
 > File này là nguồn chuẩn; bản `.docx` sinh bằng pandoc + reference FOXAI — sửa ở đây rồi sinh lại.
 
@@ -79,6 +79,20 @@ Các đoạn cách nhau bằng **dòng trống** (`\n\n` trong JSON). Đoạn đ
 | `**đậm**` / `*nghiêng*` | Bold / italic trong câu |
 | `!! ghi chú` | Callout trung tính nền xám |
 | `!b` `!t` `!d` `!l` `!p` `!c` `!g` | 7 hộp có nhãn: BỐI CẢNH · THÀNH PHẨM · ĐÒN BẨY · LỖI THƯỜNG GẶP · MẸO PRO · CÁCH DỰNG · BẢN GIAO VIỆC (nền đậm chữ accent) |
+
+## 4B. Quy trình sản xuất 5 giai đoạn (sách hoàn chỉnh, từ v5)
+
+Dùng cho sách thật (nhiều chương, cần chất lượng phát hành) — thay cho "3 bước nhanh" ở mục 3:
+
+| GĐ | Việc | Anh cần làm gì |
+|---|---|---|
+| 1 | **Nạp bản thảo raw** — đưa file `.txt`/`.md`/`.docx` (hoặc `.pdf`), skill đọc bằng `read_source.py` | Cung cấp đường dẫn file; xác nhận ngôn ngữ/cấu trúc skill báo lại |
+| 2 | **Master plan** — skill lập `book-plan-<tên>.md`: mục lục, mục tiêu + ý chính từng chương, kế hoạch ảnh minh họa từng chương | **Duyệt plan (nói "chốt")** — cổng cứng, chưa duyệt là chưa viết chữ nào |
+| 3 | **Phong cách viết** — skill lập `style-profile-<tên>.md` | Đưa 1–3 **đoạn văn mẫu** phong cách anh muốn (hiệu quả hơn mô tả); duyệt profile |
+| 4 | **Viết + prompt ảnh** — viết từng chương theo plan; sách dài có thể chạy workflow multi-agent `book-production` (mỗi chương 1 writer + 1 verifier song song); sinh prompt ảnh chuẩn hóa | Chạy prompt ảnh bên Midjourney/DALL-E... (kèm ảnh mẫu tham chiếu nếu có), lưu ảnh về, đưa đường dẫn |
+| 5 | **Kiểm tra tuân thủ + sinh sách** — agent `foxai-book-verifier` đối chiếu từng ý chính/callout/ảnh/style với plan, trả bảng PASS/FAIL | Đọc bảng verifier trước khi nhận sách; FAIL nào chấp nhận được thì xác nhận |
+
+Templates 3 file kế hoạch: `~/.claude/skills/foxai-book-writer/templates/`. Lưu ý chi phí multi-agent: sách N chương ≈ 2N agent — sách <3 chương viết tuần tự là đủ.
 
 ## 5. Quy trình đầy đủ cho sách dịch từ tài liệu nước ngoài
 

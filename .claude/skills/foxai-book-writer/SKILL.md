@@ -6,10 +6,33 @@ description: >
   "xuất bản", "generate book", "book creation", "dịch và tạo sách", "chuyển tài liệu
   thành sách", hoặc muốn tạo ebook/tài liệu dạng sách từ bất kỳ ngôn ngữ nào.
   Luôn dùng skill này khi: (1) tạo sách nhiều chương, (2) có file tài liệu nước ngoài
-  cần dịch sang tiếng Việt rồi xuất ra sách.
+  cần dịch sang tiếng Việt rồi xuất ra sách, (3) user đưa bản thảo raw (.txt/.md/.docx)
+  muốn thành sách, (4) cần lập kế hoạch mục lục/master plan cho sách, (5) cần prompt
+  sinh ảnh minh họa sách. Quy trình 5 giai đoạn có cổng duyệt — KHÔNG viết chương
+  trước khi user duyệt book-plan.
 ---
 
-# foxai-book-writer v4.1 — Premium Themes + Dịch Thuật Đa Ngôn Ngữ
+# foxai-book-writer v5 — Quy Trình Sản Xuất 5 Giai Đoạn + Multi-Agent
+
+## QUY TRÌNH SẢN XUẤT SÁCH (bắt buộc theo thứ tự, có cổng duyệt)
+
+Với yêu cầu tạo sách hoàn chỉnh, đi qua đủ 5 giai đoạn. Sách nhỏ (<3 chương, user nói "làm nhanh") có thể gộp 2+3 vào một lượt hỏi.
+
+**GĐ1 — NẠP BẢN THẢO RAW.** User cung cấp đường dẫn file `.txt`/`.md`/`.docx` (hoặc `.pdf`):
+`PYTHONUTF8=1 python scripts/read_source.py "<file>" --preview` → xác nhận ngôn ngữ + cấu trúc với user. Không có bản thảo = viết mới từ đề bài, ghi rõ trong plan.
+
+**GĐ2 — LẬP MASTER PLAN → CHỜ DUYỆT.** Tạo file `book-plan-<tên>.md` theo `templates/book-plan.md`: khung mục lục, mục tiêu + ý chính bắt buộc từng chương, kế hoạch ảnh minh họa từng chương, ràng buộc nghiệm thu. **DỪNG LẠI chờ user duyệt** ("chốt") — đây là cổng cứng, không viết chương nào trước khi qua cổng. User nói "cứ làm luôn" → tự duyệt kèm khối "Giả định:".
+
+**GĐ3 — CHỐT PHONG CÁCH VIẾT.** Tạo `style-profile-<tên>.md` theo `templates/style-profile.md`. Ưu tiên xin user **đoạn văn mẫu** (từ sách họ thích/họ tự viết) và phân tích mẫu thay vì bắt mô tả trừu tượng. Duyệt cùng cổng GĐ2 được.
+
+**GĐ4 — VIẾT + SINH PROMPT ẢNH.**
+- Viết từng chương theo plan + style profile (đọc lại style-profile mục 4-5 trước mỗi chương).
+- Sách nhiều chương / user yêu cầu song song: chạy workflow **`book-production`** (multi-agent — mỗi chương 1 writer + 1 verifier chạy song song; xem `~/.claude/workflows/book-production.js`, truyền chapters đã duyệt vào args). Lưu ý chi phí: N chương ≈ 2N agent.
+- Sinh prompt ảnh cho model AI ngoài theo `templates/image-prompts.md` (image-style do user duyệt, hỗ trợ ảnh mẫu tham chiếu) → user tự chạy bên Midjourney/DALL-E/... → ảnh về điền vào trường `image`.
+
+**GĐ5 — KIỂM TRA TUÂN THỦ + SINH SÁCH.** Ghép content vào book JSON → `generate_book.py` → gọi agent **`foxai-book-verifier`** đối chiếu toàn sách với book-plan (từng ý chính, callout, số ảnh, style, cổng duyệt) → báo cáo bảng PASS/FAIL kèm "Việc còn lại". Chỉ báo "hoàn thành" khi verifier kết luận ĐÚNG KẾ HOẠCH (rule 30).
+
+---
 
 ## Themes (mới v4.1)
 
