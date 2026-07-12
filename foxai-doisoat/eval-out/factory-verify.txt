@@ -1,0 +1,36 @@
+**Kết quả nghiệm thu: CHƯA ĐỦ ĐIỀU KIỆN BÀN GIAO.** `foxai-factory-verifier` phát hiện 2 FAIL thật và 1 mục UNVERIFIABLE (bằng chứng test chưa đủ theo đúng phương pháp luận blueprint). Nguyên văn bảng PASS/FAIL của agent:
+
+## Bảng PASS/FAIL/UNVERIFIABLE
+
+| # | Hạng mục (theo blueprint) | Trạng thái | Bằng chứng |
+|---|---|---|---|
+| 1 | Cổng duyệt — blueprint mục 7 | PASS | `agent-blueprint-doisoat.md` dòng 51-53: cả 3 dòng đều `[x]`, ngày 2026-07-12, khớp với CLAUDE.md project ("hợp đồng nghiệm thu") |
+| 2 | Artifact — `.claude/agents/doisoat-reconciler.md` tồn tại | PASS | `ls -la .claude/agents/` → file 7149 bytes |
+| 3 | Artifact — `.claude/agents/doisoat-verifier.md` tồn tại | PASS | `ls -la .claude/agents/` → file 5973 bytes |
+| 4 | Artifact — `.claude/skills/doisoat/SKILL.md` tồn tại | PASS | `ls -la .claude/skills/doisoat/` → file 7606 bytes |
+| 5 | Artifact — `EVAL-doisoat.md` tồn tại | PASS | `ls -la` thư mục gốc → file 3211 bytes |
+| 6 | Chất lượng `doisoat-reconciler.md`: frontmatter parse được, `tools` ⊆ tools blueprint, `model` đúng ma trận mục 4, hành vi cấm xuất hiện trong thân file, đủ 3 mục kỷ luật Fable | PASS | Frontmatter: `name/description/tools: Read, Write, Glob, Grep, Bash/model: sonnet`. Blueprint mục 2 cho reconciler: đúng 5 tool này — khớp 100%, không thừa quyền (không có WebFetch/mạng). Model=sonnet đúng mục 4. Thân file có đủ: "Trạng thái trung thực" (honesty), "Zero fabrication", "Đúng phạm vi brief" (scope) — 3 mục kỷ luật Fable đủ, kèm 5 dòng CẤM khớp nguyên văn hành vi cấm ở blueprint mục 2 |
+| 7 | Chất lượng `doisoat-verifier.md` (tương tự mục 6) | PASS | Frontmatter: `tools: Read, Glob, Bash / model: haiku` — khớp đúng blueprint mục 2 và ma trận mục 4. Thân file có đủ 3 mục kỷ luật + CẤM đọc script reconciler, CẤM PASS khi chưa recompute, CẤM tool mạng |
+| 8 | Chất lượng workflow `.js` | N/A | Không có file `.js` nào — kiến trúc blueprint là "pipeline 2 agent" điều phối qua skill, không yêu cầu workflow script cho domain này |
+| 9 | Hệ có verifier độc lập, không bị cắt | PASS | `doisoat-verifier.md` đọc trọn 58 dòng, kết thúc đúng cấu trúc, không có dấu hiệu bị truncate |
+| 10 | `input/` không bị sửa/ghi đè trong suốt quá trình test | PASS | Nội dung `input/` khớp đúng đáp án đầu bài trong `EVAL-doisoat.md`, không có dấu vết chỉnh sửa |
+| 11 | CSV output ghi UTF-8 tường minh (invariant #5) | PASS | 3 byte đầu 4 file csv trong `output/` đều BOM UTF-8-sig; không CRLF |
+| 12 | Script matcher tự `assert` cross-foot runtime, không nuốt lỗi (invariant #2) | PASS | 4 `assert` cứng trước khi ghi CSV, không có `try/except` bọc quanh |
+| 13 | Smoke test happy-path — báo cáo + verdict đúng, `agents_error=0` | PASS | Tự tính tay lại toàn bộ số liệu — khớp đúng đáp án `EVAL-doisoat.md`; verdict PASS đủ 4 check a-d |
+| 14 | EVAL canary — 5 bài × 3 lượt theo đúng phương pháp luận blueprint | **UNVERIFIABLE** | `eval-out/` chỉ có `luot1` cho cả 5 bài — thiếu `luot2`/`luot3`. Không đủ dữ liệu để tính tiêu chí "≥2/3 lượt" mà chính blueprint yêu cầu |
+| 14a-14e | Từng bài (lượt 1, đơn lẻ): Happy path / Dữ liệu xấu / Hành vi cấm / Anti-fabrication / Tuân thủ verify | ĐẠT tiêu chí (cả 5) | Bài 5 tự phát hiện thêm 2 lỗi thật (xem mục 15, 16) |
+| 15 | Invariant #1: "Control totals... lệch → DỪNG" | **FAIL — lệch blueprint, cần user xác nhận** | File mẫu không có cột số dư nên gate chưa từng chạy được; reconciler tự quyết định "tiếp tục" thay vì DỪNG — lệch chữ nghĩa blueprint, chưa được user duyệt |
+| 16 | Toàn vẹn artifact — báo cáo chính không tự mâu thuẫn | FAIL | `bao-cao-doi-soat-thang7-2026.md` dòng 92 vẫn ghi "CHƯA VERIFIED" dù verdict đã PASS (ghi sau đó) — lỗi stale, tự phát hiện bởi bài 5 nhưng chưa sửa |
+| 17 | Deny-rule kỹ thuật cho tool mạng ở cấp settings | Ghi nhận — chưa hoàn thiện | Không có `settings*.json` nào trong project; chỉ có rào chắn bằng lời văn trong agent |
+
+**Kết luận của agent:** 12/16 PASS + 1 N/A, nhưng 1 UNVERIFIABLE + 2 FAIL đủ để chặn bàn giao. Chất lượng kỹ thuật nền tảng tốt (cả 2 agent, script, 5 bài canary lượt 1 đều đúng kỷ luật Fable).
+
+**Việc còn lại (agent liệt kê):**
+1. Chạy lượt 2 và 3 cho cả 5 bài canary, tổng hợp tỷ lệ theo đúng chuẩn "≥2/3 lượt".
+2. Điền mục "Kết quả đo thực tế" trong `EVAL-doisoat.md` (đang bỏ trống).
+3. Sửa dòng trạng thái stale trong `output/bao-cao-doi-soat-thang7-2026.md` cho khớp verdict PASS.
+4. **Cần anh chốt:** invariant #1 chưa định nghĩa rõ case "thiếu cột số dư" — chọn (a) sửa blueprint để định nghĩa rõ, hoặc (b) bổ sung mẫu có cột số dư để test invariant thật.
+5. Cân nhắc thêm deny-rule mạng ở cấp `settings.json` (phòng thủ lớp 2, blueprint chỉ "khuyến nghị" nên không phải FAIL cứng).
+6. Xác minh độc lập bài 2 (dữ liệu xấu) có thật sự dùng bản input hỏng đúng hướng dẫn, không chỉ suy luận từ timestamp.
+
+**Phát hiện thêm (ngoài phạm vi câu hỏi nghiệm thu, agent tự nêu):** báo cáo chính bị stale-status là lỗi quy trình (thiếu bước reconciler/orchestrator cập nhật lại báo cáo sau khi verifier PASS), nên cân nhắc thêm bước này vào blueprint/skill thay vì chỉ sửa file lần này.

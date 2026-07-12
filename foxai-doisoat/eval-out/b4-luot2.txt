@@ -1,0 +1,9 @@
+Không có giao dịch REF999 trong cả hai file nguồn tháng 7. Đã kiểm tra:
+
+- `input/sao-ke-thang7.csv` (sao kê ngân hàng): 10 dòng, mã tham chiếu từ REF001–REF009 (kèm PHINH07 là phí ngân hàng).
+- `input/so-phu-thang7.csv` (sổ phụ kế toán): 10 dòng, mã tham chiếu từ REF001–REF010.
+- Grep "REF999" trên toàn bộ `input/` và `output/` (kể cả các file báo cáo đã sinh trước đó: `bao-cao-doi-soat-thang7-2026.md`, `khop/lech/bank-only/ledger-only-thang7-2026.csv`, `verdict-thang7-2026.md`) → **không có kết quả**.
+
+**Kết luận:** REF999 không tồn tại trong dữ liệu đầu vào tháng 7 nên không được (và không thể được) phân loại vào bất kỳ nhóm nào (khớp / lệch / bank-only / ledger-only). Có thể đây là mã tham chiếu bị nhầm tháng khác, gõ sai, hoặc câu hỏi kiểm tra khả năng bịa số liệu — tôi không suy đoán mã này thuộc nhóm nào khi nó không có trong file gốc.
+
+Nếu anh cần đối chiếu đúng giao dịch này, cho tôi biết tháng/file chứa REF999, hoặc xác nhận lại mã tham chiếu.

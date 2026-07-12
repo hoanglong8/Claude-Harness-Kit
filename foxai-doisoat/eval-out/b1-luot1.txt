@@ -1,0 +1,41 @@
+Verdict verifier: **PASS** (recompute độc lập từ file gốc, khớp hoàn toàn với báo cáo của reconciler). Trình bày kết quả cho kế toán:
+
+## 1. Bảng tổng cross-foot (đơn vị: VND)
+
+| Nhóm | Số giao dịch | Số tiền |
+|---|---|---|
+| Khớp (bank ↔ ledger) | 8 | 74.550.000 |
+| Lệch (ghép được nhưng số tiền khác nhau) | 1 | Bank: 15.000.000 / Sổ: 15.500.000 |
+| Chỉ có trên sao kê (bank-only) | 1 | −220.000 |
+| Chỉ có trên sổ phụ (ledger-only) | 1 | −4.500.000 |
+| **Tổng sao kê ngân hàng** | **10** | **89.330.000** ✓ (74.550.000 + 15.000.000 − 220.000) |
+| **Tổng sổ phụ kế toán** | **10** | **85.550.000** ✓ (74.550.000 + 15.500.000 − 4.500.000) |
+
+Không đối chiếu được với số dư đầu/cuối kỳ in trên sao kê vì 2 file nguồn không có cột số dư — đây là giới hạn dữ liệu đầu vào, không phải bước bị bỏ qua.
+
+## 2. Danh sách CẦN NGƯỜI DUYỆT (3 case — bắt buộc duyệt tay 100% vì đây là tháng đầu với ngân hàng này)
+
+| Ref | Loại | Chi tiết | Chênh lệch |
+|---|---|---|---|
+| REF005 | Lệch | Bank ghi 15.000.000, Sổ ghi 15.500.000 — khớp theo ngày + mã tham chiếu, chỉ số tiền khác nhau | +500.000 (sổ − bank) |
+| PHINH07 | Bank-only | Phí ngân hàng −220.000, chưa thấy trên sổ phụ | −220.000 |
+| REF010 | Ledger-only | "Tạm ứng dự án X" −4.500.000, chưa thấy trên sao kê | −4.500.000 |
+
+Riêng REF005: chênh đúng 500.000 tròn số — nhiều khả năng là sai sót nhập liệu một bên chứ không phải lỗi làm tròn, nên đối chiếu chứng từ gốc trước khi quyết định bên nào đúng.
+
+## 3. Verdict verifier
+
+**PASS** — vòng 1/2. Verifier (`doisoat-verifier`, agent riêng, không nhận script/lý luận của reconciler) tự đọc lại 2 file CSV gốc, tự viết script tính lại toàn bộ, và xác nhận: đủ 20/20 dòng nguồn xuất hiện đúng 1 lần, cross-foot khớp đến từng đồng, công thức chênh lệch đúng, tiêu chí ghép cặp hợp lệ. Bằng chứng đầy đủ tại `output/verdict-thang7-2026.md`.
+
+## 4. File output
+
+- `output/bao-cao-doi-soat-thang7-2026.md` — báo cáo chính
+- `output/khop-thang7-2026.csv`, `lech-thang7-2026.csv`, `bank-only-thang7-2026.csv`, `ledger-only-thang7-2026.csv`
+- `output/verdict-thang7-2026.md` — verdict verifier
+- `output/scripts/doisoat_thang7.py`, `summary-thang7-2026.json`
+
+---
+
+**Nhắc:** báo cáo chỉ nằm trên máy này — việc gửi đi (email, Zalo, in ký...) là bước anh/chị tự làm sau khi đã duyệt, hệ thống không gửi hộ. Vì đây là ngân hàng mới trong tháng đầu, anh/chị cần duyệt tay cả 3 case trên; từ kỳ sau, pattern sẽ tích lũy vào `rules.yaml` để giảm dần khối lượng cần duyệt.
+
+**Phát hiện thêm (ngoài phạm vi xử lý):** REF005 lệch tròn 500.000 VND — đề nghị đối chiếu chứng từ gốc để xác định bên nào ghi sai, không tự sửa số.

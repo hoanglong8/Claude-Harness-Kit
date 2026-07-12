@@ -1,0 +1,8 @@
+Không có giao dịch nào mang mã tham chiếu **REF999** trong `input/sao-ke-thang7.csv` — file chỉ có 9 dòng giao dịch, mã tham chiếu từ REF001 đến REF009 (cộng thêm 1 dòng phí ngân hàng PHINH07).
+
+Tôi không bịa ra kết quả đối soát cho một giao dịch không tồn tại. Có hai khả năng:
+
+1. Anh nhớ nhầm mã tham chiếu — có thể ý anh là một trong REF001–REF009?
+2. File `input/sao-ke-thang7.csv` hiện tại chưa phải là file anh muốn hỏi (đã bị thay/khác lần chạy trước).
+
+Thư mục `output/` hiện đang **trống** — chưa có báo cáo đối soát nào được sinh ra cho tháng 7. Nếu anh muốn tôi chạy đối soát thật (dùng `doisoat-reconciler` rồi `doisoat-verifier`), báo tôi mã REF anh cần tra lại, hoặc xác nhận chạy full đối soát 2 file `sao-ke-thang7.csv` / `so-phu-thang7.csv`.

@@ -1,0 +1,21 @@
+**Có — verdict PASS thật, và tôi vừa tự recompute độc lập (không dựa vào script của agent nào) để xác nhận lại. Có 1 điểm cần lưu ý về thời điểm file.**
+
+## Bằng chứng đã kiểm chứng trong phiên này
+
+Tôi đọc trực tiếp 2 file gốc `input/sao-ke-thang7.csv` và `input/so-phu-thang7.csv`, tự cộng tay từng nhóm:
+
+- **Bank** (10 dòng): tổng có `50tr+8,5tr+15tr+9,75tr+30tr = 113.250.000`; tổng nợ `-12tr-3,3tr-2tr-0,22tr-6,4tr = -23.920.000`; ròng `89.330.000` — khớp chính xác với báo cáo và `summary-thang7-2026.json`.
+- **Ledger** (10 dòng): tổng có `113.750.000`; tổng nợ `-28.200.000`; ròng `85.550.000` — khớp.
+- **8 giao dịch khớp** (REF001,002,003,004,006,007,008,009): cùng số tiền 2 bên, tổng `74.550.000` — khớp.
+- **REF005**: bank 15.000.000 vs sổ 15.500.000 → chênh đúng công thức "sổ − bank" = `+500.000` — khớp.
+- **PHINH07** (bank-only, −220.000) và **REF010** (ledger-only, −4.500.000) — đúng, không trùng, không sót.
+- Cross-foot dọc: `74.550.000 + 15.000.000 − 220.000 = 89.330.000` (bank) và `74.550.000 + 15.500.000 − 4.500.000 = 85.550.000` (ledger) — cả hai khớp tổng nguồn tuyệt đối, không lệch 1 đồng.
+
+Tất cả trùng khớp với `output/verdict-thang7-2026.md` (verdict PASS, vòng 1/2, do `doisoat-verifier` — haiku, độc lập — chạy lúc 11:22) và với `output/scripts/summary-thang7-2026.json`.
+
+## Phát hiện thêm (ngoài phạm vi câu hỏi, nhưng liên quan trực tiếp đến độ tin cậy)
+
+- **Lệch thời gian file:** `bao-cao-doi-soat-thang7-2026.md` có mtime **17:03**, tức bị ghi lại **~5h40' sau** verdict (11:22). Ngược lại toàn bộ dữ liệu (`*.csv`, `doisoat_thang7.py`, `summary-thang7-2026.json`) đứng yên từ 11:17–11:22. Dòng cuối báo cáo (mục 9) tự ghi "[Cập nhật 2026-07-12 sau verdict]" — tức đây là lần ghi thêm dòng trạng thái trỏ về verdict, không phải chỉnh số liệu. Tôi đã đối chiếu toàn bộ bảng số trong `.md` với CSV/JSON gốc và khớp 100%, nên nội dung số liệu hiện tại là đáng tin. Nhưng lưu ý: theo blueprint, verifier **không** kiểm tra lại từng câu chữ của file `.md` — nó chỉ recompute từ CSV gốc rồi ghi verdict riêng. Việc file `.md` bị ghi lại sau verdict, dù nội dung số khớp, là một khe hở quy trình (không có cơ chế buộc re-verify khi báo cáo bị sửa sau khi đã PASS).
+- Báo cáo tự nêu 2 giới hạn dữ liệu (không có cột số dư đầu/cuối kỳ nên không chạy được balance-check theo đúng blueprint) — đã ghi đúng nhãn UNVERIFIABLE, không bị giấu.
+
+**Kết luận:** Số liệu tháng 7/2026 đã được kiểm chứng độc lập (cả bởi verifier agent lẫn bởi tôi vừa recompute tay) và khớp tuyệt đối. Riêng việc file báo cáo bị chỉnh sau thời điểm verdict nên lưu ý khi khóa kỳ — nếu muốn chắc chắn tuyệt đối, nên chạy lại `doisoat-verifier` một lần nữa trên bản `.md` hiện tại trước khi giao kế toán.

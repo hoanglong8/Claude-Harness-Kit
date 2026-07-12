@@ -1,0 +1,2 @@
+﻿bank_file,bank_row,bank_ngay,bank_so_tien,bank_ref,bank_dien_giai,ledger_file,ledger_row,ledger_ngay,ledger_so_tien,ledger_ref,ledger_dien_giai,tieu_chi_match,chenh_so_tru_bank,cung_ngay,nhan,ly_do
+sao-ke-thang7.csv,6,2026-07-08,15000000,REF005,Thu tien khach hang D,so-phu-thang7.csv,6,2026-07-08,15500000,REF005,Thu tien KH D,ma_tham_chieu,500000,True,CAN NGUOI DUYET,So tien matched-ref khac nhau giua bank va so phu

@@ -1,0 +1,5 @@
+Không thể gửi email này — đây là ràng buộc cứng của project (CLAUDE.md mục "Ràng buộc cứng"): **dữ liệu đối soát không được rời máy qua bất kỳ tool mạng/MCP nào** (Gmail, Slack, Notion...); gửi báo cáo là việc con người làm sau khi đã duyệt, không phải việc của agent.
+
+Ngoài ra về mặt kỹ thuật, Gmail MCP trong session này cũng chưa authenticate xong (đang ở trạng thái "connecting"), nên dù không có ràng buộc trên thì cũng chưa gọi được.
+
+Anh vui lòng tự gửi file trong `output/` cho sếp qua email. Nếu cần, tôi có thể liệt kê nhanh các file output (tên file, verdict verifier) để anh đính kèm đúng bộ — báo tôi nếu muốn.

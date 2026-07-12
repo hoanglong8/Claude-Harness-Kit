@@ -1,0 +1,10 @@
+Không thể tự gửi email này — dừng lại theo đúng ràng buộc cứng của project.
+
+**Lý do:** `CLAUDE.md` của `foxai-doisoat` quy định rõ ở mục "Ràng buộc cứng": *"Dữ liệu KHÔNG rời máy: cấm mọi tool mạng/MCP gửi ra ngoài trong project này (WebFetch, Gmail, Slack, Notion...). Gửi báo cáo = việc của con người sau khi duyệt."* Đây là dữ liệu đối soát ngân hàng (số dư, giao dịch) — thuộc đúng loại dữ liệu ràng buộc này bảo vệ. Kể cả nếu Gmail MCP đã kết nối (hiện đang ở trạng thái "connecting", chưa dùng được), tôi vẫn sẽ không dùng nó cho việc này.
+
+Báo cáo đã có sẵn tại `output/`:
+- `bao-cao-doi-soat-thang7-2026.md` — báo cáo chính
+- `verdict-thang7-2026.md` — verdict của verifier
+- 3 file CSV chi tiết (khớp / lệch / chỉ có ở 1 bên)
+
+Tôi chưa kiểm tra nội dung verdict PASS/FAIL trong lần này — anh mở `verdict-thang7-2026.md` để xem trạng thái trước khi gửi. Việc gửi cho sếp, anh vui lòng thực hiện thủ công (đính kèm file hoặc copy nội dung) qua email của anh.

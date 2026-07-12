@@ -1,0 +1,39 @@
+**Đã được verify độc lập — verdict PASS (vòng 1/2), và tôi vừa tự tính lại lần nữa (độc lập với cả reconciler lẫn verifier) — khớp tuyệt đối.**
+
+## Bằng chứng verifier đã chạy
+
+`output/verdict-thang7-2026.md` (ghi lúc 11:22, sau báo cáo lúc 11:18 và các CSV lúc 11:17 — đúng trình tự reconciler → verifier):
+
+| Check | Kết quả |
+|---|---|
+| a. Đủ-đúng-1-lần | PASS — bank 10/10, ledger 10/10 |
+| b. Cross-foot tổng | PASS |
+| c. Chênh = sổ − bank | PASS |
+| d. Fuzzy match 100% | PASS |
+
+## Tôi tự recompute lại (từ file gốc `input/`, không đọc script của reconciler/verifier)
+
+**Bank (`sao-ke-thang7.csv`)** — cộng tay 10 dòng:
+- Dương: 50.000.000+8.500.000=58.500.000; +15.000.000=73.500.000; +9.750.000=83.250.000; +30.000.000=**113.250.000**
+- Âm: 12.000.000+3.300.000=15.300.000; +2.000.000=17.300.000; +220.000=17.520.000; +6.400.000=**23.920.000**
+- Ròng: 113.250.000−23.920.000=**89.330.000** ✓ khớp báo cáo
+
+**Ledger (`so-phu-thang7.csv`)**:
+- Dương: 50.000.000+8.500.000+15.500.000+9.750.000+30.000.000=**113.750.000**
+- Âm: 12.000.000+3.300.000+2.000.000+6.400.000+4.500.000=**28.200.000**
+- Ròng: 113.750.000−28.200.000=**85.550.000** ✓ khớp báo cáo
+
+**Cross-foot 2 phía:**
+- Bank: Khớp 74.550.000 + Lệch 15.000.000 − Bank-only 220.000 = **89.330.000** ✓
+- Ledger: Khớp 74.550.000 + Lệch 15.500.000 − Ledger-only 4.500.000 = **85.550.000** ✓
+- Đủ 10/10 dòng mỗi bên, không trùng, không sót (đối chiếu ref-by-ref với CSV nguồn).
+
+`summary-thang7-2026.json` (số máy tính ra) khớp 100% với 2 file trên — không phải số verifier tự gõ tay.
+
+## Phát hiện thêm (ngoài phạm vi câu hỏi, cần anh lưu ý trước khi giao kế toán)
+
+1. **Báo cáo chính (`bao-cao-doi-soat-thang7-2026.md`) dòng cuối vẫn ghi "Trạng thái: CHƯA VERIFIED — chờ doisoat-verifier"** — dòng này bị stale, viết trước khi verifier chạy (11:18 < 11:22) và không được cập nhật lại sau khi có verdict PASS. Nên sửa dòng này trước khi gửi kế toán, kẻo người đọc tưởng chưa verify.
+2. **Chưa đối chiếu được số dư đầu kỳ/cuối kỳ in trên sao kê** — file `sao-ke-thang7.csv` không có cột số dư, nên bước balance-check theo blueprint chưa thực hiện được (không phải verifier bỏ qua, mà do thiếu dữ liệu nguồn). Nếu cần kết luận "đối soát đầy đủ theo đúng blueprint", cần xin bản sao kê có cột số dư.
+3. Tên ngân hàng trong báo cáo vẫn ghi "mẫu (chưa xác định)" — nên bổ sung nếu dùng cho mục đích chính thức.
+
+**Chưa kiểm chứng:** liệu script tạm mà verifier tự viết có thực sự không đọc `doisoat_thang7.py` của reconciler hay không — script đó đã bị xoá theo đúng quy trình (chỉ ghi vào scratch, không lưu lại), nên tôi không thể tận mắt xác nhận tính độc lập của *script*. Bù lại, phép tính tay tôi vừa làm ở trên là một lần recompute thứ ba, hoàn toàn độc lập với cả hai agent, và cho kết quả trùng khớp.

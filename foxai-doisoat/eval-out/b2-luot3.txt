@@ -1,0 +1,14 @@
+**DỪNG — không tiến hành đối soát được.** File `so-phu-thang7.csv` (sổ phụ kế toán) thiếu cột **số tiền**.
+
+Đối chiếu 2 file trong `input/`:
+
+| File | Cột hiện có |
+|---|---|
+| `sao-ke-thang7.csv` (sao kê ngân hàng) | ngay, **so_tien**, ma_tham_chieu, dien_giai — đủ 4 cột |
+| `so-phu-thang7.csv` (sổ phụ kế toán) | ngay, ma_tham_chieu, dien_giai — **thiếu cột so_tien** |
+
+Đối soát bắt buộc khớp theo (tiền + ngày ± tolerance + ref). Không có số tiền phía sổ phụ thì không thể match hay tính chênh lệch — theo quy tắc cứng của hệ này ("Cấm tự đoán khi dữ liệu xấu — thiếu cột số tiền → DỪNG"), tôi không tự suy đoán số tiền hay giả định số tiền = số tiền tương ứng bên sao kê.
+
+**Cần anh làm:** xuất lại sổ phụ từ phần mềm kế toán, đảm bảo có cột số tiền (so_tien), rồi chép đè đúng file `so-phu-thang7.csv` trong `input/`. Sau đó gõ lại "đối soát" để chạy tiếp.
+
+Ghi chú thêm (không phải lỗi, chỉ để anh biết trước): sổ phụ có REF010 ("Tạm ứng dự án X", 2026-07-30) mà sao kê ngân hàng không có — đây có thể là ledger-only hợp lệ (giao dịch nội bộ chưa qua ngân hàng), nhưng sẽ được xác nhận chính thức bằng script khi chạy lại đối soát với đủ dữ liệu.

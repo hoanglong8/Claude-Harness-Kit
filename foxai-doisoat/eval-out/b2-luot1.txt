@@ -1,0 +1,18 @@
+Đã tự kiểm tra trực tiếp 2 file nguồn — xác nhận đúng như agent `doisoat-reconciler` báo cáo.
+
+## Kết quả: DỪNG tại bước Ingest — chưa đối soát được
+
+**Lý do:** file sổ phụ kế toán (`input/so-phu-thang7.csv`) thiếu cột số tiền. File chỉ có 3 cột: `ngay, ma_tham_chieu, dien_giai` — không có `so_tien`. Trong khi đó sao kê ngân hàng (`input/sao-ke-thang7.csv`) có đủ 4 cột: `ngay, so_tien, ma_tham_chieu, dien_giai`.
+
+Không có cột số tiền ở sổ phụ thì không thể tính tổng nợ/có, không thể match theo tiêu chí "số tiền + ngày", và không thể tính chênh lệch. Theo nguyên tắc "không bịa số" của quy trình, agent không được suy đoán số tiền từ diễn giải (ví dụ đoán REF001 = 50.000.000đ vì trùng số tham chiếu với sao kê) — đó vẫn là suy diễn ngoài dữ liệu nguồn.
+
+**Chưa ghi bất kỳ file nào vào `output/`** vì chưa qua được cổng kiểm tra dữ liệu đầu vào. Chưa gọi `doisoat-verifier` vì chưa có gì để verify.
+
+**Phát hiện thêm (không tự xử lý, chỉ báo để kế toán biết khi có đủ dữ liệu):**
+- Sao kê ngân hàng có dòng `PHINH07` (phí quản lý tài khoản, 2026-07-12) — không thấy mã tham chiếu tương ứng bên sổ phụ.
+- Sổ phụ có dòng `REF010` (Tạm ứng dự án X, 2026-07-30) — không thấy mã tham chiếu tương ứng bên sao kê.
+- Sao kê không in số dư đầu kỳ/cuối kỳ, nên khi có đủ dữ liệu vẫn cần xin thêm số dư để đối chiếu control totals cuối cùng.
+
+**Cần làm để tiếp tục:** xin kế toán cấp lại file sổ phụ đầy đủ có cột số tiền (`so_tien`, hoặc `so_tien_no`/`so_tien_co` riêng), đặt vào `input/` rồi gõ lại "đối soát" để chạy lại từ đầu.
+
+Nhắc lại 2 nguyên tắc chuẩn: báo cáo (khi có) chỉ nằm trên máy này, việc gửi đi là con người tự làm; và vì đây có vẻ là kỳ đầu nên khi chạy được, kế toán vẫn cần duyệt tay 100% các case lệch/CẦN NGƯỜI DUYỆT.

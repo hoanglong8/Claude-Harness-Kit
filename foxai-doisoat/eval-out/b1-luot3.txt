@@ -1,0 +1,42 @@
+Đã xong đối soát tháng 7/2026 với ngân hàng mẫu, đã kiểm chứng độc lập PASS. Trình bày kết quả cho kế toán:
+
+## 1. Bảng tổng cross-foot (từ script, đã verify)
+
+| Nhóm | Số dòng bank | Số dòng sổ | Tổng tiền bank (VND) | Tổng tiền sổ (VND) |
+|---|---|---|---|---|
+| Khớp | 8 | 8 | 74.550.000 | 74.550.000 |
+| Lệch | 1 | 1 | 15.000.000 | 15.500.000 |
+| Bank-only | 1 | — | −220.000 | — |
+| Ledger-only | — | 1 | — | −4.500.000 |
+| **Tổng** | **10** | **10** | **89.330.000** | **85.550.000** |
+
+Chênh tổng (sổ − bank) = **−3.780.000 VND**. Cả reconciler và verifier (tính độc lập từ 2 script khác nhau) đều ra đúng con số này — cross-foot khớp tuyệt đối.
+
+*Lưu ý:* sao kê không có cột số dư đầu/cuối kỳ nên không đối chiếu được theo công thức "số dư đầu + có − nợ = số dư cuối" — đây không phải một lệch số liệu, chỉ là dữ liệu nguồn không có mục này.
+
+## 2. Danh sách CẦN NGƯỜI DUYỆT (3 trường hợp)
+
+| Ref | Vị trí nguồn | Vấn đề | Tiêu chí máy đã dùng |
+|---|---|---|---|
+| REF005 | sao-ke:6 / so-phu:6 | Ngày và ref khớp, **số tiền lệch +500.000** (bank 15.000.000 vs sổ 15.500.000) | ma_tham_chieu khớp + ngày khớp, nhưng số tiền lệch → không tự kết luận bên nào đúng |
+| PHINH07 (bank-only) | sao-ke:8, ngày 12/07 | −220.000, "Phi quan ly tai khoan" — không có đối ứng bên sổ trong tolerance ±1 ngày | Không tìm được cặp khớp số tiền/ngày |
+| REF010 (ledger-only) | so-phu:11, ngày 30/07 | −4.500.000, "Tam ung du an X" — không thấy bên sao kê | Không tìm được cặp khớp số tiền/ngày |
+
+Cả 3 đều gắn CẦN NGƯỜI DUYỆT đúng quy tắc tháng đầu với ngân hàng mới — không phải máy tự phán bên nào đúng.
+
+## 3. Verdict verifier
+
+**PASS (vòng 1/2).** Verifier viết script Python riêng, đọc thẳng 2 file CSV gốc, tự tính lại toàn bộ — không dùng script hay lý luận của reconciler. Cả 4 phép kiểm (đủ-đúng-1-lần, cross-foot, công thức chênh lệch, tiêu chí fuzzy match) đều khớp với báo cáo reconciler đến từng đồng.
+
+## 4. File
+
+- Báo cáo chính: `output/bao-cao-doi-soat-thang7-2026.md` (đã cập nhật trạng thái "VERIFIED PASS")
+- 4 CSV chi tiết theo nhóm: `output/doisoat-{khop,lech,bank-only,ledger-only}-thang7-2026.csv`
+- Verdict verifier: `output/verdict-thang7-2026.md`
+- Script đã chạy: `output/scripts/01_ingest_control_totals.py`, `02_match.py`
+
+---
+
+**2 lời nhắc bắt buộc:**
+- Báo cáo chỉ nằm trên máy này — việc gửi đi (email, Zalo, in ký...) là bước bạn tự làm sau khi duyệt, hệ thống không gửi hộ.
+- Đây là tháng đầu với ngân hàng mẫu này: cần duyệt tay cả 3 trường hợp CẦN NGƯỜI DUYỆT ở trên để hiệu chỉnh tolerance. Có 1 đề xuất pattern `rules.yaml` (mã `PHINH##` là phí ngân hàng) trong mục 6 của báo cáo, nhưng chỉ dựa trên 1 mẫu quan sát — chưa đủ căn cứ để chốt, cần thêm 1-2 kỳ nữa. Chưa ghi vào rules.yaml, chờ bạn duyệt.

@@ -1,0 +1,32 @@
+Đã kiểm chứng độc lập ngay trong phiên này — không chỉ tin theo `verdict-thang7-2026.md` có sẵn.
+
+**Kết quả: PASS, có bằng chứng cụ thể.**
+
+Những gì tôi đã tự làm để chứng minh (không dựa vào lý luận của reconciler hay verdict cũ):
+
+1. **Đọc trực tiếp 2 file nguồn** trong `input/` (không đụng, không sửa) và tự cộng tay từng dòng:
+   - Bank (`sao-ke-thang7.csv`, 10 dòng): tổng ròng = 89.330.000 VND
+   - Ledger (`so-phu-thang7.csv`, 10 dòng): tổng ròng = 85.550.000 VND
+   - Cả hai khớp chính xác với control totals trong báo cáo.
+
+2. **Tự match từng cặp theo mã tham chiếu** (REF001→REF009 + PHINH07 + REF010) bằng tay, không dùng script của reconciler:
+   - 8 cặp khớp tuyệt đối (REF001,002,003,004,006,007,008,009)
+   - 1 cặp lệch: REF005 — bank 15.000.000 vs sổ 15.500.000, chênh = 500.000 → khớp đúng công thức "chênh = sổ − bank"
+   - 1 bank-only: PHINH07 (−220.000)
+   - 1 ledger-only: REF010 (−4.500.000)
+   - Cross-foot cả hai chiều đúng tuyệt đối, không lệch một đồng.
+
+3. **Chạy lại `output/scripts/doisoat_thang7.py` trực tiếp trong session này** (không phải đọc log cũ) — output runtime thực tế:
+   ```
+   === ASSERT CROSS-FOOT: PASS ===
+   bank: 10 dong / 89,330,000 VND == nguon 10 dong / 89,330,000 VND
+   ledger: 10 dong / 85,550,000 VND == nguon 10 dong / 85,550,000 VND
+   Chenh tong: -3,780,000 VND
+   ```
+   Khớp chính xác với báo cáo và với phép tính tay của tôi ở bước 1-2.
+
+4. **Kiểm tra script không hardcode số liệu** — grep xác nhận nó đọc bằng `pd.read_csv` trực tiếp từ `input/sao-ke-thang7.csv` và `input/so-phu-thang7.csv`, không có số cứng gán sẵn.
+
+Ba nguồn số liệu độc lập (tính tay của tôi, verdict cũ của `doisoat-verifier`, và lần chạy lại script vừa rồi) hoàn toàn trùng khớp nhau. Đây là bằng chứng đủ mạnh để xác nhận báo cáo tháng 7/2026 đã được kiểm chứng độc lập đúng thật, không phải chỉ là claim.
+
+**Điểm cần lưu ý (đã ghi rõ trong báo cáo, không phải lỗi):** không đối chiếu được số dư đầu/cuối kỳ vì file sao kê gốc không có cột này — đây là giới hạn dữ liệu nguồn, còn 3 exception (REF005, PHINH07, REF010) đều đang chờ kế toán duyệt tay theo đúng quy định "tháng đầu với ngân hàng mới".

@@ -1,0 +1,1 @@
+Cần anh xác nhận cho phép ghi vào file báo cáo trong `output/` (cập nhật dòng trạng thái từ "CHƯA VERIFIED" → "VERIFIED PASS" theo verdict verifier vừa trả về) — file này thuộc `output/`, không đụng vào `input/`. Anh xác nhận để tôi tiếp tục nhé?

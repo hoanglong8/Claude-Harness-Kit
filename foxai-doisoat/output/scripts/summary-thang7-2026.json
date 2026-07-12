@@ -1,0 +1,26 @@
+{
+  "ct_bank": {
+    "nguon": "sao-ke-thang7.csv (bank)",
+    "so_dong": 10,
+    "tong_no": "-23920000",
+    "tong_co": "113250000",
+    "tong_rong": "89330000"
+  },
+  "ct_ledger": {
+    "nguon": "so-phu-thang7.csv (ledger)",
+    "so_dong": 10,
+    "tong_no": "-28200000",
+    "tong_co": "113750000",
+    "tong_rong": "85550000"
+  },
+  "n_khop": 8,
+  "n_lech": 1,
+  "n_bank_only": 1,
+  "n_ledger_only": 1,
+  "tong_dong_bank_4nhom": 10,
+  "tong_dong_ledger_4nhom": 10,
+  "tong_tien_bank_4nhom": "89330000",
+  "tong_tien_ledger_4nhom": "85550000",
+  "chenh_tong": "-3780000",
+  "balance_check_note": "Nguon khong co cot so du dau ky / so du cuoi ky in tren sao ke -> KHONG THE doi chieu 'so du dau + tong co - tong no = so du cuoi'. Day la gioi han du lieu dau vao, khong phai loi bo qua buoc."
+}

@@ -1,0 +1,38 @@
+Kết luận của foxai-factory-verifier (lần 2): **CHƯA ĐỦ ĐIỀU KIỆN BÀN GIAO**.
+
+Nguyên văn bảng PASS/FAIL đầy đủ (22 hạng mục):
+
+| # | Hạng mục | Trạng thái | Bằng chứng |
+|---|---|---|---|
+| 1 | Cổng duyệt — blueprint mục 7 | **FAIL** | Amendment invariant #1 (dòng 23) tự khai *"chờ user xác nhận"*, không có dòng gate riêng đã tick, không commit log nào ghi nhận duyệt |
+| 2 | Artifact `doisoat-reconciler.md` | PASS | tồn tại, 61 dòng, đọc trọn |
+| 3 | Artifact `doisoat-verifier.md` | PASS | tồn tại, 58 dòng, đọc trọn |
+| 4 | Artifact `SKILL.md` | PASS | tồn tại, 83 dòng |
+| 5 | Artifact `EVAL-doisoat.md` | PASS | mục "Kết quả đo thực tế" đã điền |
+| 6 | Chất lượng `doisoat-reconciler.md` | PASS | tools/model/hành vi cấm/3 mục Fable đều khớp blueprint |
+| 7 | Chất lượng `doisoat-verifier.md` | PASS | tools/model/hành vi cấm/3 mục Fable đều khớp blueprint |
+| 8 | Workflow `.js` | N/A | không thuộc kiến trúc domain này |
+| 9 | Verifier độc lập, không bị cắt | PASS | đọc trọn 58 dòng |
+| 10 | Amendment #1 — implement ở đâu | **FAIL** | Grep 0 kết quả trong agent/skill config; chỉ xuất hiện trong văn bản blueprint và output runtime — hành vi ngẫu nhiên, không phải rule cài đặt bền vững |
+| 11 | `.claude/settings.json` deny-rule | PASS | JSON hợp lệ, chặn đúng nhóm WebFetch/Gmail/Slack/Notion... theo blueprint |
+| 12 | `SKILL.md` bước cập nhật trạng thái | PASS | đúng vị trí (Bước 4 mục 5), nội dung khớp ý đồ |
+| 13 | `output/` dòng stale đã sửa | PASS | báo cáo hiện ghi "VERIFIED PASS... [Cập nhật 2026-07-12 sau verdict]" |
+| 14 | CSV UTF-8 (invariant #5) | PASS | cả 4 file có BOM |
+| 15 | Script matcher assert cross-foot (invariant #2) | PASS | 4 assert cứng, không try/except nuốt lỗi |
+| 16 | Smoke test happy-path | PASS | verdict PASS vòng 1/2, đủ 4 check |
+| 17 | EVAL "15/15" có đúng thật không | **FAIL (số liệu sai)** | Bài 2-5 đúng 3/3. Bài 1: `b1-luot2.txt` thực ra là phiên bị nghẽn xin quyền, không sinh báo cáo/verdict — nhưng bảng vẫn đánh ✓. Thực tế **14/15**, không phải 15/15 |
+| 18 | Đóng finding round 1 #14 (EVAL thiếu lượt) | PASS (có điều kiện) | đủ 15 phiên vật lý nhưng 1 phiên bị tính nhầm — xem #17 |
+| 19 | Đóng finding round 1 #15 (invariant #1 lệch blueprint) | **FAIL — vẫn mở** | amendment vẫn chưa được user chốt, chưa codify |
+| 20 | Đóng finding round 1 #16 (báo cáo mâu thuẫn) | PASS | đã sửa + có bước ngăn tái diễn |
+| 21 | Đóng finding round 1 #17 (thiếu deny-rule) | PASS | đã thêm |
+| 22 | Đóng finding round 1 #6 (bài 2 dùng input hỏng thật) | PASS | xác nhận qua đọc trực tiếp cột dữ liệu |
+
+**Kết luận cuối của agent:** Điểm chặn chính là amendment invariant #1 — thứ mà đợt sửa lần 2 nhắm vào — **chưa được user chốt chính thức** và **không được codify vào bất kỳ file agent/skill nào** (chỉ hoạt động đúng nhờ hành vi ngẫu nhiên của model khi chạy eval, không có gì đảm bảo lần sau vẫn đúng). Đồng thời con số "15/15 ĐẠT" trong EVAL-doisoat.md là **sai** — thực tế 14/15 vì `b1-luot2` là phiên bị nghẽn xin quyền chứ không phải PASS.
+
+Việc còn lại theo agent:
+1. Đưa amendment invariant #1 ra để anh tự chốt gate (tick + ghi ngày/hình thức duyệt) — verifier không có quyền tự công nhận thay đổi hợp đồng này.
+2. Sau khi chốt, codify carve-out "nguồn không có cột số dư" tường minh vào `doisoat-reconciler.md` và `SKILL.md`, không để phụ thuộc suy luận ngẫu nhiên của model.
+3. Sửa lại bảng kết quả EVAL cho đúng thực trạng `b1-luot2` (nghẽn, không phải PASS) và cân nhắc chạy bù 1 lượt sạch.
+4. Kiểm tra vì sao `eval-out/factory-verify-2.txt` rỗng (0 byte) trước khi coi quy trình lưu vết nghiệm thu là đáng tin.
+
+Phát hiện thêm (ngoài phạm vi): `settings.json` không chặn `Bash`, nên về lý thuyết vẫn có đường thoát dữ liệu qua `curl`/`python requests` nếu agent bị mồi khéo léo — không sai so với yêu cầu blueprint (chỉ liệt kê WebFetch/MCP), chỉ ghi nhận để anh cân nhắc.

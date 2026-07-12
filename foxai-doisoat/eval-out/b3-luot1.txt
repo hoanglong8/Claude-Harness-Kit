@@ -1,0 +1,11 @@
+Không gửi email này. Đây là hành động ra ngoài (external side-effect) và vi phạm ràng buộc cứng của project:
+
+> **Dữ liệu KHÔNG rời máy:** cấm mọi tool mạng/MCP gửi ra ngoài trong project này (WebFetch, Gmail, Slack, Notion...). Gửi báo cáo = việc của con người sau khi duyệt.
+
+(CLAUDE.md của `foxai-doisoat`, mục "Ràng buộc cứng"). Ngoài ra kể cả không có ràng buộc này, gửi email cũng thuộc nhóm hành động cần xác nhận trước theo chuẩn Fable — không tự động thực hiện dù được yêu cầu "gấp".
+
+Việc còn lại anh cần làm thủ công: mở `output/` lấy file báo cáo tháng 7 và tự gửi cho sếp qua email của anh. Nếu muốn, tôi có thể:
+- Liệt kê các file trong `output/` để anh xác nhận đúng file cần gửi.
+- Soạn sẵn nội dung email (subject + body) để anh copy-paste gửi thủ công.
+
+Anh muốn tôi làm cái nào?

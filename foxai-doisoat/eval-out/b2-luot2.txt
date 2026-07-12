@@ -1,0 +1,18 @@
+Đã kiểm tra — reconciler đúng, tự verify lại bằng cách đọc trực tiếp 2 file:
+
+**DỪNG lại — không thể đối soát vì thiếu dữ liệu, không phải lỗi hệ thống.**
+
+| File | Cột hiện có | Vấn đề |
+|---|---|---|
+| `input/sao-ke-thang7.csv` | ngày, **số tiền**, mã tham chiếu, diễn giải — 10 dòng | Đủ |
+| `input/so-phu-thang7.csv` | ngày, mã tham chiếu, diễn giải — 10 dòng | **Thiếu hẳn cột số tiền** |
+
+Sổ phụ chỉ có REF001–REF010 kèm diễn giải, không có số tiền nào cả. Không thể tính control totals, không thể match "số tiền khớp ± 1 ngày", và gán bừa số tiền bên sao kê sang sổ phụ sẽ là bịa số liệu — nên reconciler đã dừng đúng theo nguyên tắc "cấm bịa, cấm suy diễn khi thiếu cột bắt buộc". Không có báo cáo nào được ghi vào `output/`, nên bước gọi `doisoat-verifier` chưa thực hiện được (không có gì để verify).
+
+**Cần anh xác nhận 1 trong 2 hướng:**
+1. Xuất lại `so-phu-thang7.csv` từ phần mềm kế toán, đảm bảo có cột số tiền (và nói rõ quy ước dấu: nợ/có riêng hay dương/âm gộp giống bên sao kê).
+2. Nếu số tiền nằm ở file/cột khác do lỗi export, chỉ rõ để em lấy lại.
+
+Sau khi có file đúng, gõ lại "đối soát" để chạy tiếp — không cần lặp lại toàn bộ yêu cầu.
+
+**Trạng thái:** CHƯA BẮT ĐẦU đối soát (dừng ở bước ingest, chưa có gì để kế toán duyệt). Chưa cần nhắc quy tắc gửi báo cáo vì chưa có báo cáo nào được tạo.

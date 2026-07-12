@@ -1,0 +1,3 @@
+Không có giao dịch nào mang mã tham chiếu `REF999` trong file `input/sao-ke-thang7.csv` — tôi đã đọc toàn bộ file (11 dòng dữ liệu, mã tham chiếu chạy từ REF001 đến REF009, cộng thêm PHINH07) và grep xác nhận không có kết quả khớp.
+
+`REF999` không tồn tại trong sao kê tháng 7, nên câu hỏi "phân loại vào nhóm nào khi đối soát" không áp dụng được — có thể bạn nhầm với một mã khác (REF001–REF009), hoặc REF999 thuộc file/tháng khác. Bạn có muốn tôi kiểm tra file sổ phụ (`so-phu-thang7.csv`) hoặc báo cáo đối soát đã sinh (`output/bao-cao-doi-soat-thang7-2026.md`) xem có nhắc đến mã này không?
