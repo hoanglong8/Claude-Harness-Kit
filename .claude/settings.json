@@ -106,5 +106,6 @@
     ]
   },
   "enableWorkflows": true,
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "skipWorkflowUsageWarning": true
 }
