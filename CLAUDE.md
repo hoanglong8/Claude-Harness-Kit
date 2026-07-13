@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-07-11 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-07-12 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -100,8 +100,9 @@ Keywords "viết tài liệu / BA / framework / glossary / specification" → au
 - **Hugging Face Hub** — tìm models, datasets, papers (user: hoanglong208)
 - **Gmail, Google Calendar** — OAuth authenticate lần đầu
 - **Notion, Slack** — đọc/viết pages, messages
+- **GitHub** — xem PR, issues, CI status, tạo PR (scoped per session)
 
-**Recommended Skills:** `/update-config` (settings/hooks/permissions) · `/loop` · `/schedule` · `/simplify` · `/security-review` · `/claude-api`
+**Recommended Skills:** `/update-config` · `/loop` · `/schedule` · `/simplify` · `/security-review` · `/claude-api` · `/run` · `/verify` · `/code-review` · `/dataviz`
 
 ---
 
