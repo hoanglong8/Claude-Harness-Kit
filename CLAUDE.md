@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-07-26 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-08-02 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
