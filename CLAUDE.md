@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-08-09 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-08-16 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -52,6 +52,7 @@
 - `/review`, `/security-review` — Review PR/branch
 - `/intake` — Khai thác yêu cầu trước deliverable lớn (bắt buộc theo rule 20)
 - `/model <opus|sonnet|haiku>` — Đổi model (mặc định: Fable 5)
+- `/fast` — Toggle Fast mode (Opus output nhanh hơn, không downgrade model)
 - `/update-config`, `/loop`, `/schedule` — Config & automation
 
 **Auto-Memory:** lệnh `stats / init / list-projects` — chi tiết đã tách ra `.claude/rules/auto-memory.md` (tự nạp)
