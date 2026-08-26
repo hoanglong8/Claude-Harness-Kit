@@ -94,7 +94,6 @@ SUBTEXT     = HexColor('#555555')   # Subtitles, secondary
 LIGHT_GRAY  = HexColor('#8A8A8A')   # Footer, small labels
 TOC_GRAY    = HexColor('#CCCCCC')   # Large TOC numbers (decorative)
 CALLOUT_BG  = HexColor(_T['callout_bg'])# Callout box background
-DARK_OVERLAY= Color(*_T['overlay'], alpha=0.72)
 
 BORDER_INS  = 0.60 * cm
 BORDER_LW   = 0.8
@@ -266,15 +265,9 @@ def _page_frame(c, color=GOLD, inset=BORDER_INS, lw=BORDER_LW):
     c.rect(inset, inset, PAGE_W-2*inset, PAGE_H-2*inset, fill=0, stroke=1)
     c.restoreState()
 
-def _bg_navy(c, image=None):
-    """Navy background (cover, splash pages) with optional image overlay."""
+def _bg_navy(c):
+    """Navy background (cover, splash pages) — pure programmatic, no image."""
     c.setFillColor(COVER_BG); c.rect(0,0,PAGE_W,PAGE_H,fill=1,stroke=0)
-    if image and os.path.exists(image):
-        try:
-            c.drawImage(image,0,0,PAGE_W,PAGE_H,preserveAspectRatio=False,mask='auto')
-            c.saveState(); c.setFillColor(DARK_OVERLAY)
-            c.rect(0,0,PAGE_W,PAGE_H,fill=1,stroke=0); c.restoreState()
-        except: pass
 
 def _bg_cream(c):
     c.setFillColor(PAGE_BG); c.rect(0,0,PAGE_W,PAGE_H,fill=1,stroke=0)
@@ -286,7 +279,7 @@ def _lspaced(text, spacing=0.12):
 # ── PDF page builders ──────────────────────────────────────────────────────────
 def _p_cover(c, book):
     """Navy cover: border frame + series label + big title + tags + author + badge."""
-    _bg_navy(c, book.get('cover_image'))
+    _bg_navy(c)
     _page_frame(c, color=GOLD, inset=BORDER_INS+0.05*cm, lw=1.2)
 
     # Series label (top, small caps gold, letter-spaced)
@@ -474,7 +467,7 @@ def _p_toc(c, book, pn):
 
 def _p_part_splash(c, part):
     """Navy part divider."""
-    _bg_navy(c, part.get('image'))
+    _bg_navy(c)
     _page_frame(c, color=GOLD, lw=1.1)
     cy = PAGE_H * 0.50
     _txt(c, f"PHẦN {str(part['number']).upper()}", PAGE_W/2,
@@ -487,15 +480,8 @@ def _p_part_splash(c, part):
              HexColor('#D0C8B8'), 'center')
 
 def _p_chapter_opener(c, ch):
-    """Navy chapter opener splash — pure programmatic, no image required."""
-    _bg_navy(c)   # pure navy; image overlay is optional via ch.get('image')
-    if ch.get('image') and os.path.exists(ch['image']):
-        try:
-            c.drawImage(ch['image'],0,0,PAGE_W,PAGE_H,
-                        preserveAspectRatio=False,mask='auto')
-            c.saveState(); c.setFillColor(DARK_OVERLAY)
-            c.rect(0,0,PAGE_W,PAGE_H,fill=1,stroke=0); c.restoreState()
-        except: pass
+    """Navy chapter opener splash — pure programmatic, no image."""
+    _bg_navy(c)
     _page_frame(c, color=GOLD, lw=1.1)
     # "CHƯƠNG" small label at top (no ordinal word — matches AI Operator style)
     _txt(c, 'CHƯƠNG', ML, PAGE_H-MT, FDN(italic=True), 9, GOLD)
@@ -579,7 +565,7 @@ def _parse_story(content):
         if raw.startswith('# '):
             story.append(Paragraph(_xe(raw[2:]), SH2)); continue
         if raw.startswith('> '):
-            story.append(Paragraph(f'<i>{_xe(raw[2:].strip())}</i>', QT)); continue
+            story.append(Paragraph(f'<i>{_rl(raw[2:].strip())}</i>', QT)); continue
         # Labeled callout boxes (!b, !t, !d, !l, !p, !c, !g)
         matched_callout = False
         for pfx, (lbl, bg, lc) in CALLOUT_DEFS.items():
@@ -672,6 +658,42 @@ def _dr(p, t, name=TNR_FONT, sz=11, bold=False, italic=False, color=None):
     if color: r.font.color.rgb = color
     return r
 
+_BM_COUNTER = [200]
+
+def _add_bookmark(p, name):
+    """Mark a paragraph as a named Word bookmark (target for PAGEREF fields)."""
+    _BM_COUNTER[0] += 1
+    bm_id = str(_BM_COUNTER[0])
+    start = OxmlElement('w:bookmarkStart')
+    start.set(qn('w:id'), bm_id); start.set(qn('w:name'), name)
+    end = OxmlElement('w:bookmarkEnd')
+    end.set(qn('w:id'), bm_id)
+    p._p.insert(0, start)
+    p._p.append(end)
+
+def _add_pageref_field(p, name, sz=10, color=None, font=TNR_FONT):
+    """Insert a real Word PAGEREF field (auto-computed page number on open/refresh)."""
+    def _run():
+        r = p.add_run(); r.font.name = font; r.font.size = Pt(sz)
+        if color: r.font.color.rgb = color
+        return r
+    fld_begin = OxmlElement('w:fldChar'); fld_begin.set(qn('w:fldCharType'), 'begin')
+    _run()._r.append(fld_begin)
+    instr = OxmlElement('w:instrText'); instr.set(qn('xml:space'), 'preserve')
+    instr.text = f' PAGEREF {name} \\h '
+    _run()._r.append(instr)
+    fld_sep = OxmlElement('w:fldChar'); fld_sep.set(qn('w:fldCharType'), 'separate')
+    _run()._r.append(fld_sep)
+    _run().text = '#'  # placeholder shown until the field is refreshed in Word
+    fld_end = OxmlElement('w:fldChar'); fld_end.set(qn('w:fldCharType'), 'end')
+    _run()._r.append(fld_end)
+
+def _force_field_update_on_open(doc):
+    """Make Word recompute all fields (PAGEREF, etc.) automatically when the file is opened."""
+    settings = doc.settings.element
+    uf = OxmlElement('w:updateFields'); uf.set(qn('w:val'), 'true')
+    settings.append(uf)
+
 def _dp(doc, t='', align=WD_ALIGN_PARAGRAPH.LEFT, sz=11, bold=False, italic=False,
         color=None, sb=0, sa=6, fi=0, font=TNR_FONT, ls=None):
     p = doc.add_paragraph(); p.alignment = align
@@ -693,14 +715,15 @@ def _sp(doc, n=1):
         p.paragraph_format.space_before = Pt(0)
         p.paragraph_format.space_after  = Pt(0)
 
-def _drich(p, text, font=TNR_FONT):
+def _drich(p, text, font=TNR_FONT, sz=11, color=None, italic=False):
     for tok in re.split(r'(\*\*[^*]+\*\*|\*[^*]+\*)', text):
+        if not tok: continue
         if tok.startswith('**') and tok.endswith('**'):
-            _dr(p, tok[2:-2], name=font, bold=True)
+            _dr(p, tok[2:-2], name=font, sz=sz, bold=True, italic=italic, color=color)
         elif tok.startswith('*') and tok.endswith('*'):
-            _dr(p, tok[1:-1], name=font, italic=True)
+            _dr(p, tok[1:-1], name=font, sz=sz, italic=True, color=color)
         else:
-            _dr(p, tok, name=font)
+            _dr(p, tok, name=font, sz=sz, italic=italic, color=color)
 
 def _add_docx_page_border(sec, hex_color=None, sz=6, space=20):
     if hex_color is None: hex_color = _T['accent'][1:]
@@ -720,40 +743,6 @@ def _add_docx_page_border(sec, hex_color=None, sz=6, space=20):
         pgBorders.append(border)
     pPr.append(pgBorders)
 
-def _docx_bg_anchor(paragraph, image_path):
-    """Insert full-page behind-text background image."""
-    W = int(21.0/2.54*914400); H = int(29.7/2.54*914400)
-    run = paragraph.add_run()
-    run.add_picture(image_path, width=Emu(W), height=Emu(H))
-    w_drawing = run._r.find(qn('w:drawing'))
-    if w_drawing is None: return
-    wp_inline = w_drawing.find(qn('wp:inline'))
-    if wp_inline is None: return
-    a_blip = wp_inline.find('.//' + qn('a:blip'))
-    if a_blip is None: return
-    r_embed = a_blip.get(qn('r:embed'))
-    if not r_embed: return
-    anc = (f'<wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"'
-           f' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"'
-           f' xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"'
-           f' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"'
-           f' distT="0" distB="0" distL="0" distR="0" simplePos="0"'
-           f' relativeHeight="251658240" behindDoc="1" locked="0" layoutInCell="1" allowOverlap="0">'
-           f'<wp:simplePos x="0" y="0"/>'
-           f'<wp:positionH relativeFrom="page"><wp:posOffset>0</wp:posOffset></wp:positionH>'
-           f'<wp:positionV relativeFrom="page"><wp:posOffset>0</wp:posOffset></wp:positionV>'
-           f'<wp:extent cx="{W}" cy="{H}"/><wp:effectExtent l="0" t="0" r="0" b="0"/>'
-           f'<wp:wrapNone/><wp:docPr id="900" name="CoverBg"/><wp:cNvGraphicFramePr/>'
-           f'<a:graphic><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
-           f'<pic:pic><pic:nvPicPr><pic:cNvPr id="901" name="CoverBg"/>'
-           f'<pic:cNvPicPr preferRelativeResize="0"/></pic:nvPicPr>'
-           f'<pic:blipFill><a:blip r:embed="{r_embed}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
-           f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{W}" cy="{H}"/></a:xfrm>'
-           f'<a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>'
-           f'</pic:pic></a:graphicData></a:graphic></wp:anchor>')
-    w_drawing.remove(wp_inline)
-    w_drawing.append(etree.fromstring(anc))
-
 # ── DOCX builder ───────────────────────────────────────────────────────────────
 def build_docx(book, path):
     doc = Document()
@@ -765,19 +754,10 @@ def build_docx(book, path):
     # Page border (gold, thin)
     _add_docx_page_border(sec, sz=6, space=20)
 
-    cover_img = book.get('cover_image') or str(IMAGES_DIR / 'cover_bg.jpg')
-
     # ── Cover ──────────────────────────────────────────────────────────────
-    if os.path.exists(cover_img):
-        p_bg = doc.add_paragraph()
-        p_bg.paragraph_format.space_before = Pt(0)
-        p_bg.paragraph_format.space_after  = Pt(0)
-        _docx_bg_anchor(p_bg, cover_img)
-        p_sp = doc.add_paragraph()
-        p_sp.paragraph_format.space_before = Pt(0)
-        p_sp.paragraph_format.space_after  = Pt(391)
-    else:
-        _sp(doc, 12)
+    # No background image (DOCX has no native full-page color fill; the navy
+    # look on this page is PDF-only via _bg_navy). Cream page, text only.
+    _sp(doc, 12)
 
     # Series label
     if book.get('series_label'):
@@ -790,12 +770,12 @@ def build_docx(book, path):
     p_title.paragraph_format.space_after  = Pt(4)
     r = p_title.add_run(book['title'].upper())
     r.font.name = CG_FONT; r.font.size = Pt(44)
-    r.font.bold = True; r.font.color.rgb = WHITE_RGB if os.path.exists(cover_img) else NAVY_RGB
+    r.font.bold = True; r.font.color.rgb = NAVY_RGB
 
     # Subtitle
     if book.get('subtitle'):
         p_sub = _dp(doc, book['subtitle'], WD_ALIGN_PARAGRAPH.CENTER,
-                    sz=11, italic=True, color=CREAM_RGB, sa=12, font=CG_FONT)
+                    sz=11, italic=True, color=SUBTEXT_RGB, sa=12, font=CG_FONT)
 
     # Tags
     if book.get('tags'):
@@ -808,7 +788,7 @@ def build_docx(book, path):
     r_auth.paragraph_format.space_before = Pt(0); r_auth.paragraph_format.space_after = Pt(2)
     ra = r_auth.add_run(book.get('author','').upper())
     ra.font.name = CG_FONT; ra.font.size = Pt(14)
-    ra.font.bold = True; ra.font.color.rgb = WHITE_RGB if os.path.exists(cover_img) else NAVY_RGB
+    ra.font.bold = True; ra.font.color.rgb = NAVY_RGB
 
     if book.get('level_badge'):
         _dp(doc, book['level_badge'].upper(), WD_ALIGN_PARAGRAPH.CENTER,
@@ -840,7 +820,6 @@ def build_docx(book, path):
 
     # ── TOC ────────────────────────────────────────────────────────────────
     _dp(doc, 'MỤC LỤC', sz=22, bold=True, color=NAVY_RGB, sa=6, font=CG_FONT)
-    pg_est = 9
     for part in book.get('parts', []):
         _dp(doc, f"PHẦN {part['number']}  ·  {part.get('title','').upper()}",
             sz=9, bold=True, color=GOLD_RGB, sb=12, sa=4, font=CG_FONT)
@@ -855,14 +834,14 @@ def build_docx(book, path):
                        else str(ch.get('number','')))
             _dr(p, f"{toc_num}  ", name=CG_FONT, sz=22, bold=True, color=GOLD_RGB)
             _dr(p, ch['title'], name=CG_FONT, sz=11, bold=True, color=NAVY_RGB)
-            _dr(p, f"\t{pg_est}", sz=10, color=LIGHT_RGB)
+            _dr(p, "\t")
+            _add_pageref_field(p, f"ch_{toc_num}", sz=10, color=LIGHT_RGB)
             if ch.get('subtitle'):
                 s = doc.add_paragraph()
                 s.paragraph_format.left_indent = DCm(1.8)
                 s.paragraph_format.space_before = Pt(0); s.paragraph_format.space_after = Pt(6)
                 _set_ls(s, 1.1)
                 _dr(s, ch['subtitle'], sz=9, italic=True, color=LIGHT_RGB)
-            pg_est += 15
         _sp(doc, 1)
     doc.add_page_break()
 
@@ -891,6 +870,7 @@ def build_docx(book, path):
             r_n = p_num.add_run(ch_num_str)
             r_n.font.name = CG_FONT; r_n.font.size = Pt(80)
             r_n.font.bold = True; r_n.font.color.rgb = GOLD_RGB
+            _add_bookmark(p_num, f"ch_{ch_num_str}")
             _dp(doc, ch['title'], sz=22, bold=True, color=NAVY_RGB, sa=4, font=CG_FONT)
             if ch.get('subtitle'):
                 _dp(doc, ch['subtitle'], sz=11, italic=True, color=SUBTEXT_RGB, sa=6, font=CG_FONT)
@@ -931,7 +911,7 @@ def build_docx(book, path):
                     q.paragraph_format.right_indent = DCm(1.5)
                     q.paragraph_format.space_after  = Pt(6)
                     _set_ls(q, 1.15)
-                    _dr(q, raw[2:].strip(), sz=10, italic=True, color=SUBTEXT_RGB)
+                    _drich(q, raw[2:].strip(), sz=10, italic=True, color=SUBTEXT_RGB)
                     continue
                 # Labeled callout boxes for DOCX
                 matched_lbl = False
@@ -997,6 +977,7 @@ def build_docx(book, path):
                     p.paragraph_format.first_line_indent = DCm(0.7)
                 _drich(p, raw)
 
+    _force_field_update_on_open(doc)
     doc.save(path)
 
 # ── Entry point ────────────────────────────────────────────────────────────────

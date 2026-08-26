@@ -7,9 +7,10 @@ description: >
   thành sách", hoặc muốn tạo ebook/tài liệu dạng sách từ bất kỳ ngôn ngữ nào.
   Luôn dùng skill này khi: (1) tạo sách nhiều chương, (2) có file tài liệu nước ngoài
   cần dịch sang tiếng Việt rồi xuất ra sách, (3) user đưa bản thảo raw (.txt/.md/.docx)
-  muốn thành sách, (4) cần lập kế hoạch mục lục/master plan cho sách, (5) cần prompt
-  sinh ảnh minh họa sách. Quy trình 5 giai đoạn có cổng duyệt — KHÔNG viết chương
-  trước khi user duyệt book-plan.
+  muốn thành sách, (4) cần lập kế hoạch mục lục/master plan cho sách. Quy trình 5 giai
+  đoạn có cổng duyệt — KHÔNG viết chương trước khi user duyệt book-plan. Lưu ý: sách
+  KHÔNG còn dùng ảnh minh họa trên bìa/trang mở phần/trang mở chương (đã bỏ từ v5.1,
+  xem mục "Ảnh minh họa (đã bỏ ở v5.1)" bên dưới).
 ---
 
 # foxai-book-writer v5 — Quy Trình Sản Xuất 5 Giai Đoạn + Multi-Agent
@@ -25,12 +26,12 @@ Với yêu cầu tạo sách hoàn chỉnh, đi qua đủ 5 giai đoạn. Sách 
 
 **GĐ3 — CHỐT PHONG CÁCH VIẾT.** Tạo `style-profile-<tên>.md` theo `templates/style-profile.md`. Ưu tiên xin user **đoạn văn mẫu** (từ sách họ thích/họ tự viết) và phân tích mẫu thay vì bắt mô tả trừu tượng. Duyệt cùng cổng GĐ2 được.
 
-**GĐ4 — VIẾT + SINH PROMPT ẢNH.**
+**GĐ4 — VIẾT CHƯƠNG.**
 - Viết từng chương theo plan + style profile (đọc lại style-profile mục 4-5 trước mỗi chương).
 - Sách nhiều chương / user yêu cầu song song: chạy workflow **`book-production`** (multi-agent — mỗi chương 1 writer + 1 verifier chạy song song; xem `~/.claude/workflows/book-production.js`, truyền chapters đã duyệt vào args). Lưu ý chi phí: N chương ≈ 2N agent.
-- Sinh prompt ảnh cho model AI ngoài theo `templates/image-prompts.md` (image-style do user duyệt, hỗ trợ ảnh mẫu tham chiếu) → user tự chạy bên Midjourney/DALL-E/... → ảnh về điền vào trường `image`.
+- Không còn bước sinh prompt ảnh / chờ user chạy Midjourney — sách xuất ra không có ảnh trên bìa, trang mở phần, hay trang mở chương (xem mục "Ảnh minh họa (đã bỏ ở v5.1)").
 
-**GĐ5 — KIỂM TRA TUÂN THỦ + SINH SÁCH.** Ghép content vào book JSON → `generate_book.py` → gọi agent **`foxai-book-verifier`** đối chiếu toàn sách với book-plan (từng ý chính, callout, số ảnh, style, cổng duyệt) → báo cáo bảng PASS/FAIL kèm "Việc còn lại". Chỉ báo "hoàn thành" khi verifier kết luận ĐÚNG KẾ HOẠCH (rule 30).
+**GĐ5 — KIỂM TRA TUÂN THỦ + SINH SÁCH.** Ghép content vào book JSON → `generate_book.py` → gọi agent **`foxai-book-verifier`** đối chiếu toàn sách với book-plan (từng ý chính, callout, style, cổng duyệt) → báo cáo bảng PASS/FAIL kèm "Việc còn lại". Chỉ báo "hoàn thành" khi verifier kết luận ĐÚNG KẾ HOẠCH (rule 30).
 
 ---
 
@@ -58,10 +59,14 @@ Tạo sách phi hư cấu tiếng Việt chất lượng cao từ hai nguồn:
 |--------|---------|
 | `generate_book.py` | Tạo DOCX + PDF từ JSON |
 | `read_source.py` | Đọc & extract tài liệu nguồn (docx/txt/pdf) |
+| `ollama_process.py` | Dịch / viết lại văn phong bằng LLM local (Ollama) — thay bước thủ công ở Workflow B bước 2-3 |
 
 ```bash
 # Đọc tài liệu nguồn
 PYTHONUTF8=1 python C:\Users\Admin\.claude\skills\foxai-book-writer\scripts\read_source.py <file> [--preview]
+
+# Dịch / viết lại bằng LLM local (Ollama, model mặc định gpt-oss:20b) — tùy chọn, xem mục "Xử lý bằng Ollama local" bên dưới
+PYTHONUTF8=1 python C:\Users\Admin\.claude\skills\foxai-book-writer\scripts\ollama_process.py <source.md> --task translate --target-lang vi -o out.md
 
 # Tạo sách
 PYTHONUTF8=1 python C:\Users\Admin\.claude\skills\foxai-book-writer\scripts\generate_book.py <book.json> [output_dir]
@@ -73,7 +78,7 @@ PYTHONUTF8=1 python C:\Users\Admin\.claude\skills\foxai-book-writer\scripts\gene
 
 1. **Thu thập nội dung** — đọc file hoặc nhận nội dung trực tiếp từ user
 2. **Cấu trúc JSON** — tổ chức thành parts → chapters với nội dung markdown
-3. **Điền metadata** — title, subtitle, series_label, tags, author, cover_image
+3. **Điền metadata** — title, subtitle, series_label, tags, author
 4. **Lưu JSON** → Desktop hoặc nơi user chỉ định
 5. **Chạy `generate_book.py`** → DOCX + PDF có timestamp
 6. **Báo kết quả** — đường dẫn file + size
@@ -130,6 +135,43 @@ Xây dựng JSON book data như Workflow A, thêm trường:
 
 ---
 
+## Xử lý bằng Ollama local (tùy chọn, thay bước 2-3 thủ công)
+
+Khi máy có Ollama chạy sẵn (`ollama serve`) và model đã pull (khuyến nghị `gpt-oss:20b`), có thể
+dùng `ollama_process.py` để tự động hoá bước dịch (Workflow B bước 2) hoặc viết lại văn phong
+(Workflow B bước 3), thay vì Claude tự dịch/viết lại thủ công từng đoạn.
+
+```bash
+# Dịch nguyên file sang tiếng Việt
+PYTHONUTF8=1 python scripts/ollama_process.py source.md --task translate --target-lang vi -o translated.md
+
+# Viết lại văn phong theo style-profile đã duyệt (áp lên nội dung đã dịch hoặc nội dung có sẵn)
+PYTHONUTF8=1 python scripts/ollama_process.py translated.md --task rewrite --style-profile style-profile.md -o final.md
+
+# Chain 2 bước 1 lệnh (dịch rồi viết lại luôn)
+PYTHONUTF8=1 python scripts/ollama_process.py source.md --task translate --task rewrite --style-profile style-profile.md -o final.md
+
+# Đổi model (mặc định gpt-oss:20b — nhanh; gpt-oss:120b — chậm hơn nhiều, chất lượng cao hơn)
+PYTHONUTF8=1 python scripts/ollama_process.py source.md --task translate --model gpt-oss:120b -o final.md
+```
+
+Cơ chế: script tách riêng ký hiệu cấu trúc (`## `, `> `, `**`, `!b `...) khỏi phần văn bản trước khi
+gửi cho model, rồi ghép lại — tránh LLM làm hỏng cú pháp content markdown của `generate_book.py`.
+Mỗi block (đoạn văn/heading) là một lần gọi API riêng (`/api/chat`), nên sách càng nhiều đoạn thì
+càng lâu (gpt-oss:20b: ước lượng ~10–20s/đoạn tuỳ độ dài).
+
+**Giới hạn cần biết:**
+- LLM dịch/viết lại là **diễn giải lại câu chữ**, không phải chép nguyên văn — khác với việc chỉ
+  định dạng lại nội dung có sẵn (Workflow A). Không dùng cách này khi user yêu cầu giữ nguyên
+  100% câu chữ gốc.
+- Việc giữ đúng vị trí `**bold**`/`*italic*` sau khi dịch/viết lại là best-effort của model, không
+  đảm bảo tuyệt đối — nên đọc lại bản output trước khi đưa vào JSON, đặc biệt các đoạn có nhiều
+  cụm in đậm/nghiêng lồng nhau.
+- Vẫn phải qua đủ cổng duyệt GĐ2/GĐ3 trước khi chạy hàng loạt — không tự ý dịch/viết lại cả sách
+  rồi mới xin duyệt.
+
+---
+
 ## JSON Schema
 
 ### Book-level fields
@@ -148,7 +190,6 @@ Xây dựng JSON book data như Workflow A, thêm trường:
   "tags": ["CLAUDE COWORK", "CLAUDE CODE", "CÔNG VIỆC THẬT"],
   "level_badge": "ADVANCED · CẤP ĐỘ NÂNG CAO",
   "cover_quote": "Trích dẫn ngắn trên bìa",
-  "cover_image": "C:\\path\\to\\cover.jpg",
   "source_language": "en",
   "source_file": "C:\\path\\to\\original.docx",
   "translation_note": "Ghi chú về quá trình dịch",
@@ -167,7 +208,6 @@ Xây dựng JSON book data như Workflow A, thêm trường:
   "number": "I",
   "title": "Tên Phần",
   "subtitle": "Phụ đề phần",
-  "image": "C:\\path\\to\\part_bg.jpg",
   "chapters": [...]
 }
 ```
@@ -181,10 +221,21 @@ Xây dựng JSON book data như Workflow A, thêm trường:
   "section_title": "Label nhỏ trên đầu nội dung",
   "quote": "Trích dẫn trên splash page",
   "quote_attribution": "NGUỒN · NĂM",
-  "image": "C:\\path\\to\\chapter_bg.jpg",
   "content": "Nội dung markdown (xem syntax bên dưới)"
 }
 ```
+
+## Ảnh minh họa (đã bỏ ở v5.1)
+
+`generate_book.py` **không còn chèn ảnh vào bìa, trang mở phần, hay trang mở chương**. Trước v5.1,
+các trang này vẽ ảnh phủ toàn trang (`preserveAspectRatio=False`, kéo méo ảnh) rồi phủ thêm lớp tối
+lên trên để chữ dễ đọc — bị coi là chất lượng kém (ảnh méo) nên đã gỡ bỏ theo yêu cầu người dùng.
+
+Các field `cover_image` (book-level), `image` (part-level), `image` (chapter-level) **không còn được
+hỗ trợ** — nếu JSON vẫn có các field này, `generate_book.py` sẽ bỏ qua hoàn toàn, không lỗi nhưng
+cũng không render gì. Đừng lập kế hoạch ảnh cho các vị trí này trong book-plan nữa; mục 3 của
+`templates/book-plan.md` chỉ còn ý nghĩa nếu user tự yêu cầu một cơ chế ảnh khác trong tương lai
+(hiện chưa có).
 
 ---
 
@@ -230,7 +281,7 @@ Xây dựng JSON book data như Workflow A, thêm trường:
 
 | Element | Chi tiết |
 |---------|---------|
-| Màu nền bìa | Navy `#1E2A45` (thuần programmatic; `cover_image` tùy chọn) |
+| Màu nền bìa | Navy `#1E2A45` — thuần programmatic, không dùng ảnh |
 | Màu nền body | Cream white `#FDFCF8` |
 | Viền trang | Gold `#C9A84C`, 0.8pt, inset 6mm — **mọi trang** |
 | Heading | Navy `#1E2A45` bold, Cormorant Garamond + gold underline |
@@ -246,9 +297,7 @@ Xây dựng JSON book data như Workflow A, thêm trường:
 
 ## Assets
 - Fonts: `C:\Users\Admin\.claude\skills\foxai-book-writer\assets\fonts\` (auto-download lần đầu)
-- Images: `C:\Users\Admin\.claude\skills\foxai-book-writer\assets\images\`
-  - `cover.png` — ảnh bìa mặc định
-  - `Chapter_N.png` — ảnh chương
+- Thư mục `assets\images\` không còn được `generate_book.py` dùng (xem mục "Ảnh minh họa (đã bỏ ở v5.1)")
 
 ## Lưu ý kỹ thuật
 - `PYTHONUTF8=1` bắt buộc khi chạy trên Windows
