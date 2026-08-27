@@ -55,6 +55,7 @@
 !/scripts/
 !/settings.json
 !/setup-template.sh
+!/vps-harness-kit/
 
 # ============================================================================
 # Everything below applies WITHIN the allow-listed tree above (these bare

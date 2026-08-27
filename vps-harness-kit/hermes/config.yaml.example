@@ -1,0 +1,62 @@
+# ============================================================================
+# THAM KHẢO — KHÔNG copy nguyên si.
+# Ưu tiên `hermes setup` / `hermes setup model` để sinh config.yaml đúng schema
+# của bản Hermes cài trên VPS. File này chỉ minh hoạ các khối cần cho profile
+# foxai-qwen, trích từ config.yaml thật trên máy nguồn (schema _config_version 35
+# — bản VPS có thể khác).
+#
+# Vị trí file thật: ~/.hermes/profiles/foxai-qwen/config.yaml
+# (xem `hermes config path`)
+# ============================================================================
+
+# --- Model: trỏ profile sang Qwen 3.6 nội bộ FOXAI ---
+model:
+  default: qwen3.6-35b-a3b
+  provider: custom
+  base_url: http://222.252.99.27:8035/v1
+  api_key: ${HERMES_CUSTOM_FOXAI_QWEN_API_KEY}   # resolve từ .env — KHÔNG ghi key thật ở đây
+  api_mode: chat_completions
+  context_length: 262144
+
+# --- Đăng ký vào catalog để /model chuyển qua lại được ---
+custom_providers:
+  - name: foxai-qwen
+    base_url: http://222.252.99.27:8035/v1
+    key_env: HERMES_CUSTOM_FOXAI_QWEN_API_KEY
+    model: qwen3.6-35b-a3b
+    api_mode: chat_completions
+    models:
+      qwen3.6-35b-a3b:
+        context_length: 262144
+
+# --- Agent ---
+agent:
+  max_turns: 60
+  verbose: false
+  reasoning_effort: medium
+
+# --- Terminal ---
+terminal:
+  backend: local
+  cwd: .
+  timeout: 180
+
+# --- Nén context ---
+compression:
+  enabled: true
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+  protect_first_n: 3
+
+# --- Memory ---
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+
+# --- Hiển thị ---
+display:
+  compact: false
+  streaming: true
+  show_reasoning: false
+  skin: default

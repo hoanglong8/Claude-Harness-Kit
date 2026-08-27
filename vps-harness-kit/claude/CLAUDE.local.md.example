@@ -1,0 +1,67 @@
+# Personal Claude Code Configuration — VPS
+> Cấp độ: GLOBAL cá nhân · KHÔNG commit vào bất kỳ repo nào
+> Thứ tự ưu tiên khi mâu thuẫn: chuẩn Fable (`~/.claude/rules/fable/`) → CLAUDE.md global → CLAUDE.md project → file này.
+> Preference cá nhân KHÔNG được nới lỏng các rule không-thương-lượng của Fable (chống bịa, verify-before-done, scope).
+
+---
+
+## 1. MODEL PREFERENCE
+
+- Default trong `~/.claude/settings.json`: **sonnet** (giữ chuẩn Fable tốt nhờ fable-harness — EVAL 12/12).
+- Đổi khi cần: `/model opus-5` (planning/trade-off phức tạp) · `/model haiku-4.5` (quick/bulk).
+- ⚠️ Chạy headless (`claude -p --model X`) có thể ghi đè key `"model"` trong settings.json — kiểm tra lại sau batch test.
+
+---
+
+## 2. OUTPUT PREFERENCES
+
+- Tiếng Việt luôn luôn; thuật ngữ kỹ thuật giữ tiếng Anh.
+- Terse — 1-2 câu mỗi update tiến độ.
+- Không có đoạn tóm tắt cuối message (người dùng đọc diff rồi).
+- Code: comment tối thiểu, theo convention của project.
+- Answer-first: câu đầu tiên là kết quả/kết luận.
+
+---
+
+## 3. PERMISSION POLICY
+
+- Auto-allow: Read, Glob, Grep, Edit (file local).
+- Hỏi trước: Bash (lệnh ngoài), network calls, cài package.
+- Không bao giờ: thao tác phá hủy khi chưa xác nhận rõ ràng (hook guard sẽ nhắc thêm).
+
+---
+
+## 4. ENVIRONMENT
+
+- **KHÔNG set `ANTHROPIC_API_KEY`** ở mức user/shell profile — nó đè lên login claude.ai (subscription), mất connectors + tính phí API riêng. Nếu 1 project cần key API riêng: set tạm trong đúng process đó.
+- `CLAUDE_PROJECT_LANG=vi` đã đặt trong settings.json.
+
+---
+
+## 5. SESSION MANAGEMENT
+
+- Mỗi session = 1 mục tiêu cụ thể.
+- Compact khi ~70% context: `/compact "focus on [X]"`.
+- Tiếp tục session cũ: `claude -c`.
+
+---
+
+## 6. AUTO-CAPTURE MEMORY (end-of-session)
+
+- Mỗi session kết thúc ("done"/"xong" hoặc context ~80%): tự capture insight nếu có giá trị thật.
+- What: decisions, learnings, blockers, next actions, non-obvious patterns.
+- Where: `~/.claude/projects/<project>/memory/<topic>.md` (Write tool) + 1 dòng index vào `MEMORY.md`.
+- Format: frontmatter + content theo memory spec.
+- Không spam việc vặt.
+
+---
+
+## 7. SECRETS TRÊN VPS
+
+- Không lưu API key plaintext ra file/env ở mức user.
+- Hermes: đặt key vào file `.env` của profile (`hermes config env-path` để biết đường dẫn), tên biến `HERMES_CUSTOM_FOXAI_QWEN_API_KEY` — không in ra chat/log.
+- File nào lỡ chứa key → thay bằng placeholder, đặt key vào cơ chế secret của công cụ.
+
+---
+
+**Files không commit ở đâu:** `CLAUDE.local.md`, `.claude/settings.local.json`, `.claude/cache/*`.
