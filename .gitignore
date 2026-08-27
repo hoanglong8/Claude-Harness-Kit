@@ -1,3 +1,66 @@
+# ============================================================================
+# SECURITY: this repo's working tree root is the Windows user profile
+# (C:\Users\<user>), NOT a dedicated project folder. Only the entries
+# explicitly allow-listed below are meant to be tracked; everything else in
+# the profile (SSH keys, browser data, credentials, personal documents,
+# other apps' config, etc.) must stay invisible to git by default.
+#
+# This uses default-deny + allow-list, not a blocklist: a blocklist has to
+# name every dangerous thing and will always miss the next one (this is how
+# `.ssh/`, `9router_API_Key.txt`, `Cookies/`, `NTUSER.DAT`, `.mcp.json`,
+# `.claude.json` etc. ended up sitting untracked-but-stageable in this repo).
+#
+# Rules for editing this file safely:
+#   - Never remove the `/*` line or the `!/...` allow-list below it.
+#   - Adding a new legitimate top-level project folder means adding one more
+#     `!/folder-name/` line here — a deliberate, reviewable edit, not
+#     something `git add .`/`git add -A` should ever do automatically.
+#   - Before trusting this file, verify it matches reality:
+#       git status                 # should show none of .ssh/, Cookies/,
+#                                   # AppData/, Desktop/, NTUSER.DAT, etc.
+#       git ls-files | grep -v ...  # every tracked path should start with
+#                                   # one of the allow-listed prefixes below
+# ============================================================================
+
+# Ignore everything at the profile root by default...
+/*
+
+# ...then explicitly allow only the real project content (verified against
+# `git ls-files` on 2026-08-26 — every one of the 170 currently-tracked
+# files lives under one of these top-level entries).
+!/.claude/
+!/.github/
+!/.gitignore
+!/AGENTS.md
+!/CHANGELOG_2026-05-08.md
+!/CLAUDE-TEMPLATE.md
+!/CLAUDE.md
+!/GLOBAL_HOOK_SETUP.md
+!/HARNESS-INIT-UPDATE-NOTES.md
+!/HUONG-DAN-SU-DUNG-FOXAI-AGENT-FACTORY.md
+!/HUONG-DAN-TAO-EBOOK-FOXAI-BOOK-WRITER.md
+!/INTEGRATION_NOTES.md
+!/MEMORY.md
+!/README-TEMPLATE.md
+!/README.md
+!/SETUP-GUIDE-FABLE-HARNESS.md
+!/Setup-Guide-Fable-Mindset.md
+!/Setup-Guide-Harness-Template.md
+!/Setup-Guide-Harness-init-Skill.md
+!/docs/
+!/fable-harness/
+!/foxai-doisoat/
+!/harness-init.skill
+!/memory/
+!/scripts/
+!/settings.json
+!/setup-template.sh
+
+# ============================================================================
+# Everything below applies WITHIN the allow-listed tree above (these bare
+# patterns match at any depth once a parent directory is allow-listed).
+# ============================================================================
+
 # Layer 5 (Observability): Logs are local, never commit
 .claude/logs/*.jsonl
 .claude/logs/*.log
