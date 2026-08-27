@@ -145,4 +145,6 @@ Nguồn chuẩn: `C:\Users\Admin\fable-harness\` (canonical) · Đo lường: `f
   - **TUYỆT ĐỐI KHÔNG `git add .` / `git add -A` từ home** — sẽ kéo file cá nhân (Downloads, Documents, .ssh...) lên repo public. Luôn `git add` đích danh từng path.
   - Sửa fable-harness: sửa tại `fable-harness/` (canonical, tracked) → đồng bộ sang `~/.claude/` (bản chạy) và `~\.claude\Claude-Harness-Kit\` (working copy, đã gitignore — không commit lại)
   - File `.ps1` của harness phải giữ UTF-8 BOM (PowerShell 5.1 đọc không BOM sẽ vỡ tiếng Việt)
+  - Thư mục top-level được track (allow-list trong `.gitignore`): `fable-harness/`, `docs/`, `foxai-doisoat/`, `memory/`, `scripts/`, `vps-harness-kit/`. Thêm folder mới = thêm 1 dòng `!/tên-folder/` vào `.gitignore` (sửa có chủ đích, không để `git add` tự làm)
+  - `vps-harness-kit/` — bộ file dựng Claude + Hermes harness chuẩn Fable trên VPS Linux mới (`bash install.sh`); chi tiết ở `vps-harness-kit/README.md`
 - Secrets: không set `ANTHROPIC_API_KEY` trong env (đè lên login claude.ai); key 9router nằm trong Windows Credential Manager (resource `9router`, user `api`) — không tạo lại file key plaintext
