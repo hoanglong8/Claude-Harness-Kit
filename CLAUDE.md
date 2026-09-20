@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-09-13 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-09-20 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -109,7 +109,7 @@ Keywords "viết tài liệu / BA / framework / glossary / specification" → au
 
 ## 8. DANH SÁCH PROJECTS & FILES THAM KHẢO
 
-**Projects (14 items):**
+**Projects (13 items):**
 - Dự án Triển khai VN: Sở KHCN HN, Lào Cai, VPCP, Công An, Bệnh viện A, Agribank, Việt Hưng, Văn Định
 - Dự án Lào: TPLUS, LaoVietBank
 - Cơ hội KD: Vân Đồn, LDBank, APBank
