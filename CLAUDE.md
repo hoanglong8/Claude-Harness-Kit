@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-10-04 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-10-11 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -51,7 +51,7 @@
 - `/compact "focus on [X]"` — Nén context khi ~70%
 - `/review`, `/security-review` — Review PR/branch
 - `/intake` — Khai thác yêu cầu trước deliverable lớn (bắt buộc theo rule 20)
-- `/model <fable-5-1|opus-5|sonnet-5|haiku-4.5>` — Đổi model (mặc định: Fable 5.1 = claude-fable-5-1)
+- `/model <fable-5-1|opus-5-5|sonnet-5-5|haiku-5-5>` — Đổi model (mặc định: Fable 5.1 = claude-fable-5-1)
 - `/fast` — Toggle Fast mode (Opus output nhanh hơn, không downgrade model)
 - `/update-config`, `/loop`, `/schedule` — Config & automation
 
