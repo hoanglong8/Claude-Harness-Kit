@@ -1,6 +1,6 @@
 # Global Claude Code Rules
 > Áp dụng cho MỌI project trên máy PC này
-> Cập nhật: 2026-10-18 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
+> Cập nhật: 2026-10-25 | Nguồn: Tài liệu chính thức Anthropic + kinh nghiệm thực tế
 
 ---
 
@@ -103,7 +103,7 @@ Keywords "viết tài liệu / BA / framework / glossary / specification" → au
 - **Notion, Slack** — đọc/viết pages, messages
 - **GitHub** — xem PR, issues, CI status, tạo PR (scoped per session)
 
-**Recommended Skills:** `/update-config` · `/loop` · `/simplify` · `/security-review` · `/claude-api` · `/run` · `/code-review` · `/dataviz` · `/fewer-permission-prompts` · `/artifact-design` · `/workflow-authoring` · `/plugin-authoring` · `/docx` · `/pdf` · `/xlsx` · `/pptx`
+**Recommended Skills:** `/update-config` · `/loop` · `/simplify` · `/security-review` · `/claude-api` · `/run` · `/code-review` · `/dataviz` · `/fewer-permission-prompts` · `/artifact-design` · `/workflow-authoring` · `/plugin-authoring` · `/docx` · `/pdf` · `/xlsx` · `/pptx` · `deep-research` · `morning` · `vault-semantic-search`
 
 ---
 
